@@ -1,9 +1,9 @@
-function abysaglobalneneabili(){
+function abysaglobalneneabili():void{
 
     let canvas:any,canvasCtx:any;
     const fps = 24;
     let gravity = 1;
-    let kocky = [];
+    let kocky:any = [];
     let selectedObject = 0
     let pressedKeys = {87:0,83:0,65:0,68:0,13:0,107:0,109:0,81:0}
         
@@ -25,9 +25,11 @@ function abysaglobalneneabili(){
         
     }
 
-    const kockaClass = function (x, y, width, height, type):{} {
+    const kockaClass = function (x:number, y:number, width:number, height:number, type:string):{} {
             
-        const values = {x, y, width, height, type, color:"red", collision : 0, moveXspeed : 0, moveYspeed : 0, direction : "up", jumpFromWhere:0, jumpAgain:1}
+        const values = {x, y, width, height, type, 
+                        color:"red", collision : 0, moveXspeed : 0, 
+                        moveYspeed : 0, direction : "up", jumpFromWhere:0, jumpAgain:1}
             
         return {
             ...values,	
@@ -44,7 +46,7 @@ function abysaglobalneneabili(){
             
     }
 
-    function updateAll() {
+    function updateAll():void {
         
         canvasCtx.fillStyle='green';
         canvasCtx.fillRect(0,0,canvas.width,canvas.height)		
@@ -65,7 +67,7 @@ function abysaglobalneneabili(){
         
     }
 
-    function moveObject(){
+    function moveObject():void{
         
         if(pressedKeys[87] > 0) kocky[selectedObject].setMove(   0,-0.5,6,3.5)
         if(pressedKeys[83] > 0) kocky[selectedObject].setMove(   0, 0.5,6,3.5)
@@ -90,7 +92,7 @@ function abysaglobalneneabili(){
         
     }
 
-    function setValue(kocka){
+    function setValue(kocka:any){
         return {
             setValue : (value, setCol) => {
                 kocka[value] = setCol	
@@ -102,7 +104,7 @@ function abysaglobalneneabili(){
         
         return {
             
-            moveObjectUpDown : (height, speed, fromWhereY) => {
+            moveObjectUpDown : (height:number, speed:number, fromWhereY:number) => {
                 
                 if(kocka.y<fromWhereY && kocka.direction=='up')
                     kocka.direction='down'
@@ -120,11 +122,11 @@ function abysaglobalneneabili(){
         
     }
 
-    function jump(kocka){
+    function jump(kocka:any){
         
         return {
             
-            jump : (jumpContinue, height, speed) => {
+            jump : (jumpContinue:number, height:number, speed:number) => {
                 
                 //if(jumpContinue>0){		
                 
@@ -147,7 +149,7 @@ function abysaglobalneneabili(){
         
     }
 
-    function checkCollision(kocka){
+    function checkCollision(kocka:any){
         
         return {
             
@@ -163,7 +165,7 @@ function abysaglobalneneabili(){
         
     }
 
-    function rigidCollision(kocka){
+    function rigidCollision(kocka:any){
         
         return {
             
@@ -194,7 +196,7 @@ function abysaglobalneneabili(){
         
     }
 
-    function draw(kocka) {
+    function draw(kocka:any) {
         
         return {
             
@@ -210,11 +212,11 @@ function abysaglobalneneabili(){
         
     }
 
-    function setMove(kocka) {
+    function setMove(kocka:any) {
 
         return {
         
-            setMove : (moveXspeed, moveYspeed, maxXspeed, maxYspeed) => {
+            setMove : (moveXspeed:number, moveYspeed:number, maxXspeed:number, maxYspeed:number) => {
                 
                 kocka.moveYspeed += moveYspeed
                 kocka.moveYspeed = Math.min(maxYspeed, Math.max( -maxYspeed, kocka.moveYspeed))
@@ -228,7 +230,7 @@ function abysaglobalneneabili(){
         
     }
 
-    function move(kocka) {
+    function move(kocka:any) {
 
         return {
         
