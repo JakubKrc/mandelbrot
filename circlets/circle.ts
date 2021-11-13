@@ -1,7 +1,7 @@
 let mainInterval:number;
 
 let scaleX:number, scaleY:number;
-let boundCanvas:any;
+let boundCanvas:{left:number, right:number, top:number, width:number, height:number};
 
 let timeWait:number[] = [];
 
@@ -23,7 +23,7 @@ let inputPs = 60;
 
 let pressedKeys = {87:0,83:0,65:0,68:0,13:0,107:0,109:0,81:0}
         
-window.onload = function () {
+window.onload = function ():void {
     
     canvas = document.querySelector('canvas')
     canvasCtx = canvas.getContext('2d')
@@ -164,7 +164,7 @@ function canvasMsgSimple(text:string):void {
     
 }
 
-function fullscreenLockmouseMsg() {
+function fullscreenLockmouseMsg():void {
 
     if (!fullscreenActive && !canvasPointerLock) {
         canvasMsgSimple('Click on display to enter fullscreen.')
