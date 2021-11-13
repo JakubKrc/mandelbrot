@@ -1,19 +1,18 @@
-var mainInterval;
-var scaleX, scaleY;
-var boundCanvas;
-var timeWait = [];
-var polomer = 20;
-var uholMier = 0;
-var uholMier2 = 0;
-var rychlost = 3;
-var kruhX, kruhY;
-var mousePos = { x: 0, y: 0 };
-var canvasPointerLock = false;
-var fullscreenActive = false;
-var canvas, canvasCtx;
-var fps = 60;
-var inputPs = 60;
-var pressedKeys = { 87: 0, 83: 0, 65: 0, 68: 0, 13: 0, 107: 0, 109: 0, 81: 0 };
+export let mainInterval;
+let scaleX, scaleY;
+let boundCanvas;
+let polomer = 20;
+let uholMier = 0;
+let uholMier2 = 0;
+let rychlost = 3;
+let kruhX, kruhY;
+let mousePos = { x: 0, y: 0 };
+let canvasPointerLock = false;
+let fullscreenActive = false;
+export let canvas, canvasCtx;
+export let fps = 60;
+let inputPs = 60;
+export let pressedKeys = { 87: 0, 83: 0, 65: 0, 68: 0, 13: 0, 107: 0, 109: 0, 81: 0 };
 window.onload = function () {
     canvas = document.querySelector('canvas');
     canvasCtx = canvas.getContext('2d');
@@ -23,8 +22,8 @@ window.onload = function () {
     mousePos.x = canvas.width / 2;
     mousePos.y = canvas.height / 2;
     window.addEventListener('resize', fitCanvasToBrowser);
-    document.addEventListener("keydown", function (evt) { return pressedKeys[evt.keyCode]++; });
-    document.addEventListener("keyup", function (evt) { return pressedKeys[evt.keyCode] = 0; });
+    document.addEventListener("keydown", (evt) => pressedKeys[evt.keyCode]++);
+    document.addEventListener("keyup", (evt) => pressedKeys[evt.keyCode] = 0);
     canvas.addEventListener("click", function () {
         if (!fullscreenActive)
             canvas.requestFullscreen();
@@ -49,10 +48,10 @@ function calculateMouseCoordinates(e) {
         mousePos.y = (e.clientY - boundCanvas.top) * scaleY;
         return;
     }
-    var pomerStran = ((canvas.width / canvas.height) < (boundCanvas.width / boundCanvas.height))
+    let pomerStran = ((canvas.width / canvas.height) < (boundCanvas.width / boundCanvas.height))
         ? (boundCanvas.height / canvas.height) : (boundCanvas.width / canvas.width);
-    var rozdielCanvasFullscreenX = boundCanvas.width - (canvas.width * pomerStran);
-    var rozdielCanvasFullscreenY = boundCanvas.height - (canvas.height * pomerStran);
+    let rozdielCanvasFullscreenX = boundCanvas.width - (canvas.width * pomerStran);
+    let rozdielCanvasFullscreenY = boundCanvas.height - (canvas.height * pomerStran);
     scaleX = canvas.width / (boundCanvas.width - rozdielCanvasFullscreenX);
     scaleY = canvas.height / (boundCanvas.height - rozdielCanvasFullscreenY);
     if (!canvasPointerLock) {
@@ -64,7 +63,7 @@ function calculateMouseCoordinates(e) {
     mousePos.y += e.movementY * scaleY;
 }
 function fitCanvasToBrowser() {
-    var pomerStran = ((window.innerWidth / window.innerHeight) > (canvas.width / canvas.height))
+    let pomerStran = ((window.innerWidth / window.innerHeight) > (canvas.width / canvas.height))
         ? window.innerHeight / canvas.height : window.innerWidth / canvas.width;
     canvas.style.width = pomerStran * canvas.width + "px";
     canvas.style.height = pomerStran * canvas.height + "px";
@@ -76,7 +75,7 @@ function mainDraw() {
     canvasCtx.fillStyle = 'green';
     canvasCtx.fillRect(0, 0, canvas.width, canvas.height);
     canvasCtx.fillStyle = 'red';
-    for (var uhol = 0; uhol < Math.PI * 2; uhol += Math.PI / 60) {
+    for (let uhol = 0; uhol < Math.PI * 2; uhol += Math.PI / 60) {
         canvasCtx.fillRect(kruhX + Math.cos(uhol) * polomer, kruhY + Math.sin(uhol) * polomer, 1, 1);
     }
     canvasCtx.fillStyle = 'blue';

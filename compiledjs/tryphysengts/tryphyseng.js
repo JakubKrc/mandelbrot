@@ -1,27 +1,15 @@
-"use strict";
-var __assign = (this && this.__assign) || function () {
-    __assign = Object.assign || function(t) {
-        for (var s, i = 1, n = arguments.length; i < n; i++) {
-            s = arguments[i];
-            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
-                t[p] = s[p];
-        }
-        return t;
-    };
-    return __assign.apply(this, arguments);
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-var canvas, canvasCtx;
-var fps = 24;
-var gravity = 1;
-var kocky = [];
-var selectedObject = 0;
-var pressedKeys = { 87: 0, 83: 0, 65: 0, 68: 0, 13: 0, 107: 0, 109: 0, 81: 0 };
+let canvas, canvasCtx;
+const fps = 24;
+let gravity = 1;
+let kocky = [];
+let selectedObject = 0;
+let pressedKeys = { 87: 0, 83: 0, 65: 0, 68: 0, 13: 0, 107: 0, 109: 0, 81: 0 };
+let mainInterval = 0;
 window.onload = function () {
     canvas = document.getElementById('gameCanvas');
     canvasCtx = canvas.getContext('2d');
-    document.addEventListener("keydown", function (evt) { return pressedKeys[evt.keyCode]++; });
-    document.addEventListener("keyup", function (evt) { return pressedKeys[evt.keyCode] = 0; });
+    document.addEventListener("keydown", (evt) => pressedKeys[evt.keyCode]++);
+    document.addEventListener("keyup", (evt) => pressedKeys[evt.keyCode] = 0);
     kocky[0] = kockaClass(60, 40, 20, 20, 'mob');
     kocky[1] = kockaClass(70, 70, 50, 50, '');
     kocky[2] = kockaClass(150, 150, 20, 20, '');
@@ -29,29 +17,27 @@ window.onload = function () {
     mainInterval = setInterval(updateAll, 1000 / fps);
     setInterval(moveObject, 1000 / fps);
 };
-var kockaClass = function (x, y, width, height, type) {
-    var values = { x: x, y: y, width: width, height: height, type: type, color: "red", collision: 0, moveXspeed: 0,
+const kockaClass = function (x, y, width, height, type) {
+    const values = { x, y, width, height, type,
+        color: "red", collision: 0, moveXspeed: 0,
         moveYspeed: 0, direction: "up", jumpFromWhere: 0, jumpAgain: 1 };
-    return __assign(__assign(__assign(__assign(__assign(__assign(__assign(__assign(__assign(__assign({}, values), draw(values)), move(values)), setMove(values)), checkCollision(values)), rigidCollision(values)), moveObjectUpDown(values)), jump(values)), setValue(values)), { returnValues: function (rvalues) {
-            if (rvalues === void 0) { rvalues = values; }
-            return rvalues;
-        } });
+    return Object.assign(Object.assign(Object.assign(Object.assign(Object.assign(Object.assign(Object.assign(Object.assign(Object.assign(Object.assign({}, values), draw(values)), move(values)), setMove(values)), checkCollision(values)), rigidCollision(values)), moveObjectUpDown(values)), jump(values)), setValue(values)), { returnValues: (rvalues = values) => { return rvalues; } });
 };
 function updateAll() {
     canvasCtx.fillStyle = 'green';
     canvasCtx.fillRect(0, 0, canvas.width, canvas.height);
-    kocky.forEach(function (obj) { return obj.setValue('collision', false); });
-    kocky.forEach(function (obj) { if (obj.type == 'mob')
+    kocky.forEach(obj => obj.setValue('collision', false));
+    kocky.forEach(obj => { if (obj.type == 'mob')
         obj.setMove(0, gravity, 3.5, 3.5); });
-    kocky.forEach(function (obj) { return obj.move(0.2, 0.2); });
+    kocky.forEach(obj => obj.move(0.2, 0.2));
     kocky[2].moveObjectUpDown(40, 1, 120);
-    for (var x in kocky)
-        for (var y in kocky)
+    for (let x in kocky)
+        for (let y in kocky)
             if (x != y && kocky[x].checkCollision(kocky[y].returnValues())) {
                 if (kocky[x].returnValues().type == 'mob')
                     kocky[x].rigidCollision(kocky[y].returnValues());
             }
-    kocky.forEach(function (obj) { return obj.draw(); });
+    kocky.forEach(obj => obj.draw());
 }
 function moveObject() {
     if (pressedKeys[87] > 0)
@@ -81,14 +67,14 @@ function moveObject() {
 }
 function setValue(kocka) {
     return {
-        setValue: function (value, setCol) {
+        setValue: (value, setCol) => {
             kocka[value] = setCol;
         }
     };
 }
 function moveObjectUpDown(kocka) {
     return {
-        moveObjectUpDown: function (height, speed, fromWhereY) {
+        moveObjectUpDown: (height, speed, fromWhereY) => {
             if (kocka.y < fromWhereY && kocka.direction == 'up')
                 kocka.direction = 'down';
             if (kocka.y > fromWhereY + height && kocka.direction == 'down')
@@ -102,7 +88,7 @@ function moveObjectUpDown(kocka) {
 }
 function jump(kocka) {
     return {
-        jump: function (jumpContinue, height, speed) {
+        jump: (jumpContinue, height, speed) => {
             //if(jumpContinue>0){		
             if (kocka.collision)
                 kocka.jumpAgain = true;
@@ -120,8 +106,7 @@ function jump(kocka) {
 }
 function checkCollision(kocka) {
     return {
-        checkCollision: function (_a) {
-            var x2 = _a.x, y2 = _a.y, width2 = _a.width, height2 = _a.height;
+        checkCollision: ({ x: x2, y: y2, width: width2, height: height2 }) => {
             if ((kocka.x < x2 + width2) && (kocka.x + kocka.width > x2) &&
                 (kocka.y < y2 + height2) && (kocka.y + kocka.height > y2))
                 kocka.collision = true;
@@ -131,8 +116,7 @@ function checkCollision(kocka) {
 }
 function rigidCollision(kocka) {
     return {
-        rigidCollision: function (_a) {
-            var x = _a.x, y = _a.y, width = _a.width, height = _a.height, moveXspeed = _a.moveXspeed, moveYspeed = _a.moveYspeed;
+        rigidCollision: ({ x: x, y: y, width: width, height: height, moveXspeed: moveXspeed, moveYspeed: moveYspeed }) => {
             if (kocka.x + kocka.width > x && kocka.x + kocka.width < x + kocka.moveXspeed + moveXspeed + 1) {
                 kocka.x = x - kocka.width;
                 kocka.moveXspeed = 0;
@@ -176,7 +160,7 @@ function rigidCollision(kocka) {
 }
 function draw(kocka) {
     return {
-        draw: function () {
+        draw: () => {
             if (kocka.collision)
                 kocka.color = 'blue';
             else
@@ -188,7 +172,7 @@ function draw(kocka) {
 }
 function setMove(kocka) {
     return {
-        setMove: function (moveXspeed, moveYspeed, maxXspeed, maxYspeed) {
+        setMove: (moveXspeed, moveYspeed, maxXspeed, maxYspeed) => {
             kocka.moveYspeed += moveYspeed;
             kocka.moveYspeed = Math.min(maxYspeed, Math.max(-maxYspeed, kocka.moveYspeed));
             kocka.moveXspeed += moveXspeed;
@@ -198,7 +182,7 @@ function setMove(kocka) {
 }
 function move(kocka) {
     return {
-        move: function (moveResistanceX, moveResistanceY) {
+        move: (moveResistanceX, moveResistanceY) => {
             kocka.y += kocka.moveYspeed;
             kocka.x += kocka.moveXspeed;
             //kocka.y = Math.round(kocka.y)

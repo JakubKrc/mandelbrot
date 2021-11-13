@@ -1,9 +1,7 @@
-let mainInterval:number;
+export let mainInterval:number;
 
 let scaleX:number, scaleY:number;
 let boundCanvas:{left:number, right:number, top:number, width:number, height:number};
-
-let timeWait:number[] = [];
 
 let polomer = 20;	  	 
 let uholMier = 0;
@@ -17,11 +15,11 @@ let mousePos = {x : 0,y : 0};
 let canvasPointerLock = false;
 let fullscreenActive = false;
 
-let canvas:any, canvasCtx:any;
-let fps = 60;
+export let canvas:any, canvasCtx:any;
+export let fps = 60;
 let inputPs = 60;
 
-let pressedKeys = {87:0,83:0,65:0,68:0,13:0,107:0,109:0,81:0}
+export let pressedKeys = {87:0,83:0,65:0,68:0,13:0,107:0,109:0,81:0}
         
 window.onload = function ():void {
     
