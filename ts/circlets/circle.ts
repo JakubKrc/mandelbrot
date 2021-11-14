@@ -8,6 +8,8 @@ let kruhX:number ,kruhY: number;
 let inputPs = 60;
 
 let pressedKeys = {87:0,83:0,65:0,68:0,13:0,107:0,109:0,81:0}
+
+let menuKeyCheck = 0;
         
 window.onload = function ():void {
 
@@ -105,14 +107,21 @@ function mainCalculate():void{
     if(pressedKeys[87] > 0) {kruhX += Math.cos(uholMier) * rychlost; kruhY += Math.sin(uholMier) * rychlost}
     if(pressedKeys[83] > 0) {kruhX-= Math.cos(uholMier) * rychlost;  kruhY -= Math.sin(uholMier) * rychlost}
             
-    if(pressedKeys[13] > 0) 
+    if(menuKeyCheck>0) menuKeyCheck++;
+    if(menuKeyCheck>fps*1.5) menuKeyCheck=0;
+    
+    if(pressedKeys[13] > 0 && menuKeyCheck==0){ 
+
+        menuKeyCheck=1;
         if(mainInterval != 0){
             clearInterval(mainInterval)
             mainInterval = 0
             console.log('off')
         } else {
             console.log('on')
-            mainInterval = setInterval(mainCalculate , 30/fps)
+            mainInterval = setInterval(mainCalculate , 1000/inputPs)
         }
+
+    }
             
 }

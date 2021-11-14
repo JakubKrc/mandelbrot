@@ -5,6 +5,7 @@ let rychlost = 3;
 let kruhX, kruhY;
 let inputPs = 60;
 let pressedKeys = { 87: 0, 83: 0, 65: 0, 68: 0, 13: 0, 107: 0, 109: 0, 81: 0 };
+let menuKeyCheck = 0;
 window.onload = function () {
     inicializeCanvas("canvas");
     kruhX = canvas.width / 3;
@@ -82,7 +83,12 @@ function mainCalculate() {
         kruhX -= Math.cos(uholMier) * rychlost;
         kruhY -= Math.sin(uholMier) * rychlost;
     }
-    if (pressedKeys[13] > 0)
+    if (menuKeyCheck > 0)
+        menuKeyCheck++;
+    if (menuKeyCheck > fps * 1.5)
+        menuKeyCheck = 0;
+    if (pressedKeys[13] > 0 && menuKeyCheck == 0) {
+        menuKeyCheck = 1;
         if (mainInterval != 0) {
             clearInterval(mainInterval);
             mainInterval = 0;
@@ -90,7 +96,8 @@ function mainCalculate() {
         }
         else {
             console.log('on');
-            mainInterval = setInterval(mainCalculate, 30 / fps);
+            mainInterval = setInterval(mainCalculate, 1000 / inputPs);
         }
+    }
 }
 //# sourceMappingURL=circle.js.map
