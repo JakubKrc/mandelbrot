@@ -27,10 +27,8 @@ window.onload = function () {
     canvas.addEventListener("click", function () {
         if (!fullscreenActive)
             canvas.requestFullscreen();
-        if (!canvasPointerLock && fullscreenActive) {
+        if (!canvasPointerLock && fullscreenActive)
             canvas.requestPointerLock();
-            canvasMsgSimple('ESC to get back to browser ESC');
-        }
     });
     document.addEventListener('pointerlockchange', function () { canvasPointerLock = !canvasPointerLock; });
     document.addEventListener('fullscreenchange', function () { fullscreenActive = !fullscreenActive; });

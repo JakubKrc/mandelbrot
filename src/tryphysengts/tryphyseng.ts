@@ -1,5 +1,6 @@
 let canvas:any,canvasCtx:any;
 const fps = 24;
+
 let gravity = 1;
 let kocky:any = [];
 let selectedObject = 0

@@ -1,5 +1,3 @@
-let canvas, canvasCtx;
-const fps = 24;
 let gravity = 1;
 let kocky = [];
 let selectedObject = 0;
