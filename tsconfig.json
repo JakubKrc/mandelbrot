@@ -4,6 +4,6 @@
       "module": "es2015",
       "sourceMap": true,
       "watch": true,
-      "outDir": "compiledjs"
+      "outDir": "src"
     }
   }

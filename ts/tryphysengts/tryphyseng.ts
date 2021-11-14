@@ -1,11 +1,7 @@
-let canvas:any,canvasCtx:any;
-const fps = 24;
-
 let gravity = 1;
 let kocky:any = [];
 let selectedObject = 0
-let pressedKeys = {87:0,83:0,65:0,68:0,13:0,107:0,109:0,81:0};
-let mainInterval = 0;
+//let pressedKeys = {87:0,83:0,65:0,68:0,13:0,107:0,109:0,81:0};
 
   
 window.onload = function () {

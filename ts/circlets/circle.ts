@@ -1,8 +1,3 @@
-export let mainInterval:number;
-
-let scaleX:number, scaleY:number;
-let boundCanvas:{left:number, right:number, top:number, width:number, height:number};
-
 let polomer = 20;	  	 
 let uholMier = 0;
 let uholMier2 = 0;
@@ -10,23 +5,13 @@ let rychlost = 3;
 
 let kruhX:number ,kruhY: number;
 
-let mousePos = {x : 0,y : 0};
-
-let canvasPointerLock = false;
-let fullscreenActive = false;
-
-export let canvas:any, canvasCtx:any;
-export let fps = 60;
 let inputPs = 60;
 
-export let pressedKeys = {87:0,83:0,65:0,68:0,13:0,107:0,109:0,81:0}
+let pressedKeys = {87:0,83:0,65:0,68:0,13:0,107:0,109:0,81:0}
         
 window.onload = function ():void {
-    
-    canvas = document.querySelector('canvas')
-    canvasCtx = canvas.getContext('2d')
-    
-    fitCanvasToBrowser();
+
+    inicializeCanvas("canvas");
     
     kruhX = canvas.width/3;
     kruhY = canvas.height/3;
@@ -34,7 +19,6 @@ window.onload = function ():void {
     mousePos.x = canvas.width/2;
     mousePos.y = canvas.height/2;
     
-    window.addEventListener('resize', fitCanvasToBrowser);
     document.addEventListener("keydown", (evt) => pressedKeys [evt.keyCode]++)
     document.addEventListener("keyup", (evt) => pressedKeys[evt.keyCode] = 0)
     
@@ -45,9 +29,6 @@ window.onload = function ():void {
             canvas.requestPointerLock();
         
     });
-    
-    document.addEventListener('pointerlockchange', function() {canvasPointerLock = !canvasPointerLock;});
-    document.addEventListener('fullscreenchange', function() {fullscreenActive = !fullscreenActive;});
 
     canvas.addEventListener("mousemove", calculateMouseCoordinates);
     
@@ -87,20 +68,7 @@ function calculateMouseCoordinates(e:any):void{
     mousePos.y += e.movementY * scaleY; 
 }
 
-function fitCanvasToBrowser():void {
 
-    let pomerStran = ((window.innerWidth/window.innerHeight) > (canvas.width/canvas.height))
-        ? window.innerHeight/canvas.height : window.innerWidth/canvas.width;
-
-    canvas.style.width = pomerStran * canvas.width + "px";
-    canvas.style.height = pomerStran * canvas.height+ "px";
-    
-    boundCanvas = canvas.getBoundingClientRect();
-                                
-    scaleX = canvas.width/boundCanvas.width;
-    scaleY = canvas.height/boundCanvas.height;
-    
-}
 
 function mainDraw():void {
     
@@ -147,29 +115,4 @@ function mainCalculate():void{
             mainInterval = setInterval(mainCalculate , 30/fps)
         }
             
-}
-
-function canvasMsgSimple(text:string):void {
-    
-    canvasCtx.fillStyle='black';
-    canvasCtx.fillRect(0.2*canvas.width , 0.8*canvas.height, 0.6*canvas.width, 0.1*canvas.height)
-    canvasCtx.font = (canvas.height/24) + "px Georgia";
-    canvasCtx.fillStyle = "red";
-    canvasCtx.textAlign = "center";
-    canvasCtx.fillText(text , canvas.width/2, canvas.height*0.86); 
-    
-}
-
-function fullscreenLockmouseMsg():void {
-
-    if (!fullscreenActive && !canvasPointerLock) {
-        canvasMsgSimple('Click on display to enter fullscreen.')
-        return;
-    }
-    if (fullscreenActive && !canvasPointerLock) {
-        canvasMsgSimple('Click on display to lock mouse.')
-        return;
-    }
-    canvasMsgSimple("Press ESC to get back to browser.");
-
 }
