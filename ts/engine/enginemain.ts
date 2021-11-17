@@ -1,15 +1,15 @@
-let mainInterval:number;
-let fps = 24;
+let needFullscreenToRun = false;
 
 let scaleX:number, scaleY:number;
 let boundCanvas:{left:number, right:number, top:number, width:number, height:number};
 
 let canvas:any,canvasCtx:any;
 
-let mousePos = {x : 0,y : 0};
-
 let canvasPointerLock = false;
 let fullscreenActive = false;
+
+let canvasMessagePointer = false;
+let canvasMessageFullscreen = false;
 
 function inicializeCanvas(canvasName:string) {
     canvas = document.querySelector(canvasName);
@@ -17,8 +17,16 @@ function inicializeCanvas(canvasName:string) {
     
     fitCanvasToBrowser();
     window.addEventListener('resize', fitCanvasToBrowser);
-    document.addEventListener('pointerlockchange', function() {canvasPointerLock = !canvasPointerLock;});
-    document.addEventListener('fullscreenchange', function() {fullscreenActive = !fullscreenActive;});
+    document.addEventListener('pointerlockchange', function() {
+        canvasPointerLock = !canvasPointerLock;
+        if (canvasPointerLock)
+            inicializeEvent(e => canvasMessagePointer = true, 3*fps);
+    });
+    document.addEventListener('fullscreenchange', function() {
+        fullscreenActive = !fullscreenActive;
+        if (fullscreenActive)
+            inicializeEvent(e => canvasMessageFullscreen = true, 3*fps);
+    });
 }
 
 function fitCanvasToBrowser():void {
@@ -49,14 +57,13 @@ function canvasMsgSimple(text:string):void {
 
 function fullscreenLockmouseMsg():void {
 
-    if (!fullscreenActive && !canvasPointerLock) {
-        canvasMsgSimple('Click on display to enter fullscreen.')
+    if (!fullscreenActive && !canvasPointerLock && needFullscreenToRun) {
+        canvasMsgSimple('Click on display to enter fullscreen.');
         return;
     }
-    if (fullscreenActive && !canvasPointerLock) {
-        canvasMsgSimple('Click on display to lock mouse.')
+    if (fullscreenActive && !canvasPointerLock && needMouseLockToRun) {
+        canvasMsgSimple('Click on display to lock mouse.');
         return;
     }
-    canvasMsgSimple("Press ESC to get back to browser.");
 
 }

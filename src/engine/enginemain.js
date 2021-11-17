@@ -1,21 +1,26 @@
 let needFullscreenToRun = false;
-let needMouseLockToRun = false;
-let needMouseLockToFollowMouse = false;
-let mainInterval;
-let fps = 24;
 let scaleX, scaleY;
 let boundCanvas;
 let canvas, canvasCtx;
-let mousePos = { x: 0, y: 0 };
 let canvasPointerLock = false;
 let fullscreenActive = false;
+let canvasMessagePointer = false;
+let canvasMessageFullscreen = false;
 function inicializeCanvas(canvasName) {
     canvas = document.querySelector(canvasName);
     canvasCtx = canvas.getContext('2d');
     fitCanvasToBrowser();
     window.addEventListener('resize', fitCanvasToBrowser);
-    document.addEventListener('pointerlockchange', function () { canvasPointerLock = !canvasPointerLock; });
-    document.addEventListener('fullscreenchange', function () { fullscreenActive = !fullscreenActive; });
+    document.addEventListener('pointerlockchange', function () {
+        canvasPointerLock = !canvasPointerLock;
+        if (canvasPointerLock)
+            inicializeEvent(e => canvasMessagePointer = true, 3 * fps);
+    });
+    document.addEventListener('fullscreenchange', function () {
+        fullscreenActive = !fullscreenActive;
+        if (fullscreenActive)
+            inicializeEvent(e => canvasMessageFullscreen = true, 3 * fps);
+    });
 }
 function fitCanvasToBrowser() {
     let pomerStran = ((window.innerWidth / window.innerHeight) > (canvas.width / canvas.height))
@@ -35,14 +40,13 @@ function canvasMsgSimple(text) {
     canvasCtx.fillText(text, canvas.width / 2, canvas.height * 0.86);
 }
 function fullscreenLockmouseMsg() {
-    if (!fullscreenActive && !canvasPointerLock) {
+    if (!fullscreenActive && !canvasPointerLock && needFullscreenToRun) {
         canvasMsgSimple('Click on display to enter fullscreen.');
         return;
     }
-    if (fullscreenActive && !canvasPointerLock) {
+    if (fullscreenActive && !canvasPointerLock && needMouseLockToRun) {
         canvasMsgSimple('Click on display to lock mouse.');
         return;
     }
-    canvasMsgSimple("Press ESC to get back to browser.");
 }
-//# sourceMappingURL=enginesource.js.map
+//# sourceMappingURL=enginemain.js.map
