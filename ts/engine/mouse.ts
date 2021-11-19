@@ -19,6 +19,35 @@ function inicializeMouse():void {
     });
 
     canvas.addEventListener("mousemove", calculateMouseCoordinates);
+    canvas.addEventListener("mousedown", e => {
+        switch (e.button){
+            case 0:
+                pressedKeys['leftMouseButton']++;
+                break;
+            case 1:
+                pressedKeys['middleMouseButton']++;
+                break;
+            case 2:
+                pressedKeys['rightMouseButton']++;
+                break;
+        }
+    });
+    document.addEventListener("mouseup", e => {
+        switch (e.button){
+            case 0:
+                pressedKeys['leftMouseButton'] = 0;
+                waitForKeyUp['leftMouseButton'] = false;
+                break;
+            case 1:
+                pressedKeys['middleMouseButton'] = 0;
+                waitForKeyUp['middleMouseButton'] = false;
+                break;
+            case 2:
+                pressedKeys['rightMouseButton'] = 0;
+                waitForKeyUp['rightMouseButton'] = false;
+                break;
+        }
+    });
 
 }
 

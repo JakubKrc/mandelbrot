@@ -9,7 +9,12 @@ function inicializeKeyboard():void {
     keys['down']=['s','S'];
     keys['left']=['a',"A"];
     keys['right']=['d',"D"];
+    keys['q']=['q',"Q"];
+    keys['e']=['e',"E"];
     keys['menu']=['Delete','p',"P"];
+    keys['fire']=['leftMouseButton'];
+    keys['use']=['rightMouseButton'];
+    keys['bla']=['middleMouseButton'];
 
     for (let key in keys) 
         for(let key2 in keys[key]){

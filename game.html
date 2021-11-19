@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<meta charset="UTF-8">
+	
+<style>
+
+	canvas {
+		position: 			absolute;
+		left:     			50%;
+		top:     			50%;
+		transform:			translate(-50%, -50%);
+		image-rendering: 	-moz-crisp-edges;
+		image-rendering: 	-webkit-crisp-edges;
+		image-rendering: 	pixelated;
+		image-rendering: 	crisp-edges;
+		cursor:				none;
+	}
+	
+	body {
+		background-color:	black;
+		margin:				0;
+	} 
+		
+</style>
+		
+<body>
+	
+	<canvas id="canvas" width="320" height="240" style="height: 50vw;"></canvas>
+	
+	<script  src="/src/engine/controls.js"></script>
+	<script  src="/src/engine/events.js"></script>
+	<script  src="/src/engine/mouse.js"></script>
+	<script  src="/src/engine/enginemain.js"></script>
+	<script  src="/src/game/crosshair.js"></script>
+	<script  src="/src/game/game.js"></script>
+
+</body>
+
+</html>

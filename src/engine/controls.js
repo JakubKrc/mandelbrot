@@ -6,8 +6,12 @@ function inicializeKeyboard() {
     keys['down'] = ['s', 'S'];
     keys['left'] = ['a', "A"];
     keys['right'] = ['d', "D"];
+    keys['q'] = ['q', "Q"];
+    keys['e'] = ['e', "E"];
     keys['menu'] = ['Delete', 'p', "P"];
     keys['fire'] = ['leftMouseButton'];
+    keys['use'] = ['rightMouseButton'];
+    keys['bla'] = ['middleMouseButton'];
     for (let key in keys)
         for (let key2 in keys[key]) {
             pressedKeys[keys[key][key2]] = 0;
@@ -40,4 +44,4 @@ function keyPressedWaitForKeyUp(keyPressed) {
     }
     return false;
 }
-//# sourceMappingURL=keyboard.js.map
+//# sourceMappingURL=controls.js.map

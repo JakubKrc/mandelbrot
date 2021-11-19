@@ -1,6 +1,7 @@
 let gravity = 1;
 let kocky = [];
 let selectedObject = 0;
+let crosshair = new crosshairClass(35, "orange");
 let fps = 30;
 let mainInterval = true;
 window.onload = function () {
@@ -18,7 +19,7 @@ const kockaClass = function (x, y, width, height, type) {
     const values = { x, y, width, height, type,
         color: "red", collision: 0, moveXspeed: 0,
         moveYspeed: 0, direction: "up", jumpFromWhere: 0, jumpAgain: 1 };
-    return Object.assign(Object.assign(Object.assign(Object.assign(Object.assign(Object.assign(Object.assign(Object.assign(Object.assign(Object.assign({}, values), draw(values)), move(values)), setMove(values)), checkCollision(values)), rigidCollision(values)), moveObjectUpDown(values)), jump(values)), setValue(values)), { returnValues: (rvalues = values) => { return rvalues; } });
+    return Object.assign(Object.assign(Object.assign(Object.assign(Object.assign(Object.assign(Object.assign(Object.assign(Object.assign(Object.assign({}, values), draw(values)), move(values)), setMove(values)), checkCollision(values)), rigidCollision(values)), moveObjectUpDown(values)), jump(values)), setValue(values)), { values: (rvalues = values) => { return rvalues; } });
 };
 function mainCalculate() {
     if (keyPressedWaitForKeyUp(keys['menu']))
@@ -46,16 +47,24 @@ function mainCalculate() {
     kocky[2].moveObjectUpDown(40, 1, 120);
     for (let x in kocky)
         for (let y in kocky)
-            if (x != y && kocky[x].checkCollision(kocky[y].returnValues())) {
-                if (kocky[x].returnValues().type == 'mob')
-                    kocky[x].rigidCollision(kocky[y].returnValues());
+            if (x != y && kocky[x].checkCollision(kocky[y].values())) {
+                if (kocky[x].values().type == 'mob')
+                    kocky[x].rigidCollision(kocky[y].values());
             }
+    //   console.log(kocky[selectedObject].values())
+    crosshair.setPosition(kocky[selectedObject].values());
+    crosshair.calculateCroshairDirectionToMouse();
 }
 function mainDraw() {
     canvasCtx.fillStyle = 'green';
     canvasCtx.fillRect(0, 0, canvas.width, canvas.height);
     kocky.forEach(obj => obj.draw());
     kocky[selectedObject].draw("black");
+    if (mouseInicialized) {
+        canvasCtx.fillStyle = 'yellow';
+        canvasCtx.fillRect(mousePos.x, mousePos.y, 6, 6);
+    }
+    crosshair.draw();
     requestAnimationFrame(mainDraw);
 }
 function setValue(kocka) {
@@ -201,5 +210,4 @@ function move(kocka) {
         }
     };
 }
-export {};
-//# sourceMappingURL=tryphyseng.js.map
+//# sourceMappingURL=game.js.map

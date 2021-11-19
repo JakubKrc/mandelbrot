@@ -1,24 +1,24 @@
-/*let gravity = 1;
+let gravity = 1;
 let kocky:any = [];
-let selectedObject = 0
-//let pressedKeys = {87:0,83:0,65:0,68:0,13:0,107:0,109:0,81:0};
+let selectedObject = 0;
+let crosshair = new crosshairClass(35,"orange");
 
+let fps = 30;
+let mainInterval = true;
   
 window.onload = function () {
+
+    inicializeKeyboard();
+    inicializeCanvas("canvas");
+    inicializeMouse();
     
-    canvas = document.getElementById('gameCanvas')
-    canvasCtx = canvas.getContext('2d')
-    
-    document.addEventListener("keydown", (evt) => pressedKeys [evt.keyCode]++)
-    document.addEventListener("keyup", (evt) => pressedKeys[evt.keyCode] = 0)
-    
-    kocky[0] = kockaClass(60,40,20,20, 'mob')
-    kocky[1] = kockaClass(70,70,50,50, '')
-    kocky[2] = kockaClass(150,150,20,20, '')
-    kocky[3] = kockaClass(0,200,400,20, '')
+    kocky[0] = kockaClass(60,40,20,20, 'mob');
+    kocky[1] = kockaClass(70,70,50,50, '');
+    kocky[2] = kockaClass(150,150,20,20, '');
+    kocky[3] = kockaClass(0,200,400,20, '');
             
-    mainInterval = setInterval(updateAll ,1000/fps)
-    setInterval (moveObject, 1000/fps)
+    setInterval(mainCalculate ,1000/fps);
+    mainDraw();
     
 }
 
@@ -38,16 +38,29 @@ const kockaClass = function (x:number, y:number, width:number, height:number, ty
         ...moveObjectUpDown(values),
         ...jump(values),
         ...setValue(values),
-        returnValues : (rvalues = values) => {return rvalues}
+        values : (rvalues = values) => {return rvalues}
     }
         
 }
 
-function updateAll():void {
+function mainCalculate():void {
+
+    if( keyPressedWaitForKeyUp ( keys['menu'] ) )
+    mainInterval = !mainInterval;
+
+    if (!mainInterval) return;
+
+    if(keyPressed(keys['up'])) kocky[selectedObject].setMove(   0,-0.5,6,3.5)
+    if(keyPressed(keys['down'])) kocky[selectedObject].setMove(   0, 0.5,6,3.5)
+    if(keyPressed(keys['left'])) kocky[selectedObject].setMove(-0.5,   0,3.5,3.5)
+    if(keyPressed(keys['right'])) kocky[selectedObject].setMove( 0.5,   0,3.5,3.5)
     
-    canvasCtx.fillStyle='green';
-    canvasCtx.fillRect(0,0,canvas.width,canvas.height)		
+    kocky[selectedObject].jump(keyPressed(keys['up']),40,6)
     
+    if(keyPressedWaitForKeyUp(keys['q'])) selectedObject++
+    if(keyPressedWaitForKeyUp(keys['e'])) selectedObject--
+    selectedObject = Math.max(0, Math.min(selectedObject, kocky.length - 1))
+     
     kocky.forEach (obj => obj.setValue('collision' ,false))
     kocky.forEach (obj => { if (obj.type=='mob') obj.setMove (0, gravity, 3.5,3.5) } )
     kocky.forEach (obj => obj.move(0.2,0.2))
@@ -55,49 +68,45 @@ function updateAll():void {
     
     for (let x in kocky)
         for (let y in kocky) 
-            if(x!=y && kocky[x].checkCollision (kocky[y].returnValues())){ 
-                if(kocky[x].returnValues().type == 'mob')
-                    kocky[x].rigidCollision ( kocky[y].returnValues() )
+            if(x!=y && kocky[x].checkCollision (kocky[y].values())){ 
+                if(kocky[x].values().type == 'mob')
+                    kocky[x].rigidCollision ( kocky[y].values() )
             }
-    
-    kocky.forEach (obj => obj.draw())
+
+    crosshair.setPosition (kocky[selectedObject].values());
+    crosshair.calculateCroshairDirectionToMouse();
     
 }
 
-function moveObject():void{
-    
-    if(pressedKeys[87] > 0) kocky[selectedObject].setMove(   0,-0.5,6,3.5)
-    if(pressedKeys[83] > 0) kocky[selectedObject].setMove(   0, 0.5,6,3.5)
-    if(pressedKeys[65] > 0) kocky[selectedObject].setMove(-0.5,   0,3.5,3.5)
-    if(pressedKeys[68] > 0) kocky[selectedObject].setMove( 0.5,   0,3.5,3.5)
-    
-    kocky[selectedObject].jump(pressedKeys[81],40,6)
-    
-    if(pressedKeys[107] > 0) selectedObject++
-    if(pressedKeys[109] > 0) selectedObject--
-    selectedObject = Math.max(0, Math.min(selectedObject, kocky.length - 1))
-    
-    if(pressedKeys[13] > 0) 
-        if(mainInterval != 0){
-            clearInterval(mainInterval)
-            mainInterval = 0
-            console.log('off')
-        } else {
-            console.log('on')
-            mainInterval = setInterval(updateAll , 1000/fps)
-        }
-    
+function mainDraw(){
+
+    canvasCtx.fillStyle='green';
+    canvasCtx.fillRect(0,0,canvas.width,canvas.height)		
+
+    kocky.forEach (obj => obj.draw())
+    kocky[selectedObject].draw("black");
+
+    if(mouseInicialized){
+        canvasCtx.fillStyle='yellow';
+        canvasCtx.fillRect(mousePos.x ,mousePos.y,6,6);	
+    }
+
+    crosshair.draw();
+
+    requestAnimationFrame(mainDraw);
+
 }
+
 
 function setValue(kocka:any){
     return {
-        setValue : (value, setCol) => {
+        setValue : (value:any, setCol:any) => {
             kocka[value] = setCol	
         }
     }
 }
 
-function moveObjectUpDown(kocka){
+function moveObjectUpDown(kocka:any){
     
     return {
         
@@ -123,18 +132,18 @@ function jump(kocka:any){
     
     return {
         
-        jump : (jumpContinue:number, height:number, speed:number) => {
+        jump : (jumpContinue:boolean, height:number, speed:number) => {
             
             //if(jumpContinue>0){		
             
                 if(kocka.collision) kocka.jumpAgain=true
 
-                if(jumpContinue > 0 && kocka.jumpAgain && kocka.jumpFromWhere==0){
+                if(jumpContinue && kocka.jumpAgain && kocka.jumpFromWhere==0){
                     kocka.jumpFromWhere=kocka.y + kocka.height
                     kocka.jumpAgain=false
                 }
                 
-                if(!kocka.jumpAgain && jumpContinue > 0 && kocka.y + kocka.height > kocka.jumpFromWhere - height && kocka.jumpFromWhere!=0)
+                if(!kocka.jumpAgain && jumpContinue && kocka.y + kocka.height > kocka.jumpFromWhere - height && kocka.jumpFromWhere!=0)
                     kocka.moveYspeed = -speed
                 else kocka.jumpFromWhere = 0
 
@@ -197,9 +206,10 @@ function draw(kocka:any) {
     
     return {
         
-        draw : () => {
+        draw : (color:string) => {
             
             if(kocka.collision) kocka.color = 'blue'; else kocka.color = 'red'
+            if(color == "black") kocka.color = "black";
             canvasCtx.fillStyle=kocka.color;
             canvasCtx.fillRect(Math.round(kocka.x),Math.round(kocka.y),kocka.width,kocka.height)
             
@@ -260,4 +270,4 @@ function move(kocka:any) {
         
     }
     
-}*/
+}
