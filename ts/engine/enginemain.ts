@@ -8,8 +8,7 @@ let canvas:any,canvasCtx:any;
 let canvasPointerLock = false;
 let fullscreenActive = false;
 
-let canvasMessagePointer = false;
-let canvasMessageFullscreen = false;
+let canvasMsg:string = null;
 
 function inicializeCanvas(canvasName:string) {
     canvas = document.querySelector(canvasName);
@@ -17,16 +16,21 @@ function inicializeCanvas(canvasName:string) {
     
     fitCanvasToBrowser();
     window.addEventListener('resize', fitCanvasToBrowser);
-    document.addEventListener('pointerlockchange', function() {
-        canvasPointerLock = !canvasPointerLock;
-        if (canvasPointerLock)
-            inicializeEvent(e => canvasMessagePointer = true, 3*fps);
-    });
-    document.addEventListener('fullscreenchange', function() {
-        fullscreenActive = !fullscreenActive;
-        if (fullscreenActive)
-            inicializeEvent(e => canvasMessageFullscreen = true, 3*fps);
-    });
+
+    if(needMouseLockToRun)
+        document.addEventListener('pointerlockchange', function() {
+            canvasPointerLock = !canvasPointerLock;
+            canvasMsg = "Press ESC to get back to browser";
+            eventWait(fps * 7, true);
+            eventInitialize (f => canvasMsg=null, 1, 0, false, false);
+        });
+    if(needFullscreenToRun)
+        document.addEventListener('fullscreenchange', function() {
+            fullscreenActive = !fullscreenActive;
+            canvasMsg = "Press ESC to get back to browser";
+            eventWait(fps * 7, true);
+            eventInitialize (f => canvasMsg=null, 1, 0, false, false);
+        });
 }
 
 function fitCanvasToBrowser():void {
@@ -57,13 +61,13 @@ function canvasMsgSimple(text:string):void {
 
 function fullscreenLockmouseMsg():void {
 
-    if (!fullscreenActive && !canvasPointerLock && needFullscreenToRun) {
+    if (canvasMsg != null)
+        return canvasMsgSimple(canvasMsg);
+
+    if (!fullscreenActive && !canvasPointerLock && needFullscreenToRun)
         canvasMsgSimple('Click on display to enter fullscreen.');
-        return;
-    }
-    if (fullscreenActive && !canvasPointerLock && needMouseLockToRun) {
+
+    if (fullscreenActive && !canvasPointerLock && needMouseLockToRun)
         canvasMsgSimple('Click on display to lock mouse.');
-        return;
-    }
 
 }

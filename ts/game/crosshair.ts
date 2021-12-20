@@ -1,16 +1,17 @@
 class crosshairClass {
 
-    x:number;
-    y:number;
+    circleX:number; circleY:number;
     radius:number;
     aimingAngle:number;
     crosshairColor:string;
     crosshairActive:boolean;
+    x:number; y:number;
+
 
     constructor (radius:number, crosshairColor:string){
 
-        this.x;
-        this.y;
+        this.circleX;
+        this.circleY;
         this.radius = radius;
         this.aimingAngle;
         this.crosshairColor = crosshairColor;
@@ -19,19 +20,21 @@ class crosshairClass {
     }
 
     calculateCroshairDirectionToMouse() {
-        this.aimingAngle = Math.atan ( (this.y - mousePos.y) / (this.x - mousePos.x) );
-        if ((this.x ) >= mousePos.x ) this.aimingAngle+=Math.PI;
+        this.aimingAngle = - Math.atan ( (-camera.y + this.circleY - mousePos.y) / (-camera.x + this.circleX - mousePos.x) );
+        if ((-camera.x + this.circleX ) >= mousePos.x ) this.aimingAngle+=Math.PI;
+
+        this.x = this.circleX + Math.cos(this.aimingAngle)*this.radius;
+        this.y = this.circleY - Math.sin(this.aimingAngle)*this.radius;
     }
 
     draw() {
         canvasCtx.fillStyle=this.crosshairColor;
-        canvasCtx.fillRect(this.x - 3 + Math.cos(this.aimingAngle)*this.radius,
-                            this.y - 3 + Math.sin(this.aimingAngle)*this.radius,6,6);	
+        canvasCtx.fillRect(-camera.x + this.x,-camera.y + this.y,6,6);
     }
 
     setPosition( {x:x, y:y, width:width, height:height} ) {
-        this.x = x + width/2;
-        this.y = y + height/2;
+        this.circleX = x + width/2;
+        this.circleY = y + height/2;
     }
 
 }

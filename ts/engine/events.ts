@@ -1,17 +1,17 @@
 let eventList: {repeats:number, howManyTimes:number, functionToRun:any, 
     runThis:boolean, moveInEventList:number, repeatFunction:boolean}[] = [];
 
-function inicializeEvent (functionToRun:any, howManyTimes:number, 
+function eventInitialize (functionToRun:any, howManyTimes:number, 
     moveInEventList=0, runThis = true, repeatFunction = false):void{
 
-    eventList.push(
+        eventList.push(
         {functionToRun: functionToRun, repeats: 0, howManyTimes: howManyTimes, 
             runThis:runThis, moveInEventList:moveInEventList, repeatFunction:repeatFunction}
     );
 
 }
 
-function runEvents() {
+function eventsRun() {
 
     eventList.forEach(
         function callback(item, index, arr) {
@@ -27,10 +27,16 @@ function runEvents() {
                 item.runThis = false;
                 arr[index + item.moveInEventList].runThis = true;
                 return;
+
             }
     
-            item.functionToRun();
+            eval(item.functionToRun);
+            //item.functionToRun();
 
         });
     
+}
+
+function eventWait (howLong:number, runThis = false, moveInEventList = 1) {
+    eventInitialize(f => {}, howLong, moveInEventList, runThis, true);
 }

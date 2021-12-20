@@ -1,25 +1,32 @@
-let gravity = 1;
-let kocky = [];
+let gravity = 0.6;
+let obj = [];
 let selectedObject = 0;
 let crosshair = new crosshairClass(35, "orange");
-let fps = 30;
+let camera = new cameraClass(0, 0);
+let fps = 60;
 let mainInterval = true;
 window.onload = function () {
     inicializeKeyboard();
     inicializeCanvas("canvas");
     inicializeMouse();
-    kocky[0] = kockaClass(60, 40, 20, 20, 'mob');
-    kocky[1] = kockaClass(70, 70, 50, 50, '');
-    kocky[2] = kockaClass(150, 150, 20, 20, '');
-    kocky[3] = kockaClass(0, 200, 400, 20, '');
+    needFullscreenToRun = false;
+    needMouseLockToRun = false;
+    obj[0] = new playableObj(190, 40, 20, 20, true, false);
+    obj[1] = new playableObj(70, 70, 50, 50, false, true);
+    obj[2] = new playableObj(150, 150, 20, 20, false, true);
+    obj[3] = new playableObj(0, 200, 1800, 20, false, true);
+    obj[4] = new playableObj(100, 177, 20, 20, false, true);
+    obj[5] = new playableObj(180, 130, 100, 20, false, true);
     setInterval(mainCalculate, 1000 / fps);
     mainDraw();
-};
-const kockaClass = function (x, y, width, height, type) {
-    const values = { x, y, width, height, type,
-        color: "red", collision: 0, moveXspeed: 0,
-        moveYspeed: 0, direction: "up", jumpFromWhere: 0, jumpAgain: 1 };
-    return Object.assign(Object.assign(Object.assign(Object.assign(Object.assign(Object.assign(Object.assign(Object.assign(Object.assign(Object.assign({}, values), draw(values)), move(values)), setMove(values)), checkCollision(values)), rigidCollision(values)), moveObjectUpDown(values)), jump(values)), setValue(values)), { values: (rvalues = values) => { return rvalues; } });
+    eventWait(40, true);
+    eventInitialize('obj[2].addVector(Math.PI/2, 0.23)', 40, 1, false, true);
+    eventWait(40);
+    eventInitialize('obj[2].addVector(3*Math.PI/2, 0.23)', 40, -3, false, true);
+    eventWait(10, true);
+    eventInitialize('obj[4].addVector(Math.PI, 0.23)', 40, 1, false, true);
+    eventWait(10);
+    eventInitialize('obj[4].addVector(2*Math.PI, 0.23)', 40, -3, false, true);
 };
 function mainCalculate() {
     if (keyPressedWaitForKeyUp(keys['menu']))
@@ -27,187 +34,51 @@ function mainCalculate() {
     if (!mainInterval)
         return;
     if (keyPressed(keys['up']))
-        kocky[selectedObject].setMove(0, -0.5, 6, 3.5);
+        obj[selectedObject].addVector(Math.PI / 2, 0.3);
     if (keyPressed(keys['down']))
-        kocky[selectedObject].setMove(0, 0.5, 6, 3.5);
+        obj[selectedObject].addVector(3 * Math.PI / 2, 0.3);
     if (keyPressed(keys['left']))
-        kocky[selectedObject].setMove(-0.5, 0, 3.5, 3.5);
+        obj[selectedObject].addVector(Math.PI, 0.3);
     if (keyPressed(keys['right']))
-        kocky[selectedObject].setMove(0.5, 0, 3.5, 3.5);
-    kocky[selectedObject].jump(keyPressed(keys['up']), 40, 6);
+        obj[selectedObject].addVector(2 * Math.PI, 0.3);
+    obj[selectedObject].jump(keyPressed(keys['jump']), 40, 5);
+    if (keyPressedWaitForKeyUp(keys['fire'])) {
+        let x = obj.push(new playableObj(crosshair.x, crosshair.y, 6, 6, true, false));
+        obj[x - 1].addVector(crosshair.aimingAngle, 8);
+    }
     if (keyPressedWaitForKeyUp(keys['q']))
         selectedObject++;
     if (keyPressedWaitForKeyUp(keys['e']))
         selectedObject--;
-    selectedObject = Math.max(0, Math.min(selectedObject, kocky.length - 1));
-    kocky.forEach(obj => obj.setValue('collision', false));
-    kocky.forEach(obj => { if (obj.type == 'mob')
-        obj.setMove(0, gravity, 3.5, 3.5); });
-    kocky.forEach(obj => obj.move(0.2, 0.2));
-    kocky[2].moveObjectUpDown(40, 1, 120);
-    for (let x in kocky)
-        for (let y in kocky)
-            if (x != y && kocky[x].checkCollision(kocky[y].values())) {
-                if (kocky[x].values().type == 'mob')
-                    kocky[x].rigidCollision(kocky[y].values());
-            }
-    //   console.log(kocky[selectedObject].values())
-    crosshair.setPosition(kocky[selectedObject].values());
+    selectedObject = Math.max(0, Math.min(selectedObject, obj.length - 1));
+    obj.forEach(obj => obj.collision = "0");
+    obj.forEach(obj => obj.todo());
+    for (let x = 0; x < obj.length; x++)
+        for (let y = 0; y < obj.length; y++)
+            if (x != y && obj[x].constructor.name == 'playableObj')
+                if (obj[y].immovable)
+                    if (obj[x].rigidCollision(obj[y]) == "bottom") {
+                        obj[x].x += obj[y].moveXspeed;
+                        obj[x].y += obj[y].moveYspeed;
+                    }
+    obj.forEach(obj => obj.move());
+    crosshair.setPosition(obj[selectedObject]);
     crosshair.calculateCroshairDirectionToMouse();
+    camera.followObject(obj[selectedObject]);
+    camera.move();
+    eventsRun();
 }
 function mainDraw() {
     canvasCtx.fillStyle = 'green';
     canvasCtx.fillRect(0, 0, canvas.width, canvas.height);
-    kocky.forEach(obj => obj.draw());
-    kocky[selectedObject].draw("black");
+    obj.forEach(obj => obj.draw());
+    obj[selectedObject].draw("black");
     if (mouseInicialized) {
         canvasCtx.fillStyle = 'yellow';
         canvasCtx.fillRect(mousePos.x, mousePos.y, 6, 6);
     }
     crosshair.draw();
+    fullscreenLockmouseMsg();
     requestAnimationFrame(mainDraw);
-}
-function setValue(kocka) {
-    return {
-        setValue: (value, setCol) => {
-            kocka[value] = setCol;
-        }
-    };
-}
-function moveObjectUpDown(kocka) {
-    return {
-        moveObjectUpDown: (height, speed, fromWhereY) => {
-            if (kocka.y < fromWhereY && kocka.direction == 'up')
-                kocka.direction = 'down';
-            if (kocka.y > fromWhereY + height && kocka.direction == 'down')
-                kocka.direction = 'up';
-            if (kocka.direction == 'up')
-                kocka.moveYspeed = -speed;
-            if (kocka.direction == 'down')
-                kocka.moveYspeed = speed;
-        }
-    };
-}
-function jump(kocka) {
-    return {
-        jump: (jumpContinue, height, speed) => {
-            //if(jumpContinue>0){		
-            if (kocka.collision)
-                kocka.jumpAgain = true;
-            if (jumpContinue && kocka.jumpAgain && kocka.jumpFromWhere == 0) {
-                kocka.jumpFromWhere = kocka.y + kocka.height;
-                kocka.jumpAgain = false;
-            }
-            if (!kocka.jumpAgain && jumpContinue && kocka.y + kocka.height > kocka.jumpFromWhere - height && kocka.jumpFromWhere != 0)
-                kocka.moveYspeed = -speed;
-            else
-                kocka.jumpFromWhere = 0;
-            //}
-        }
-    };
-}
-function checkCollision(kocka) {
-    return {
-        checkCollision: ({ x: x2, y: y2, width: width2, height: height2 }) => {
-            if ((kocka.x < x2 + width2) && (kocka.x + kocka.width > x2) &&
-                (kocka.y < y2 + height2) && (kocka.y + kocka.height > y2))
-                kocka.collision = true;
-            return kocka.collision;
-        }
-    };
-}
-function rigidCollision(kocka) {
-    return {
-        rigidCollision: ({ x: x, y: y, width: width, height: height, moveXspeed: moveXspeed, moveYspeed: moveYspeed }) => {
-            if (kocka.x + kocka.width > x && kocka.x + kocka.width < x + kocka.moveXspeed + moveXspeed + 1) {
-                kocka.x = x - kocka.width;
-                kocka.moveXspeed = 0;
-            }
-            if (kocka.x < x + width && kocka.x > x + width + kocka.moveXspeed - moveXspeed - 1) {
-                kocka.x = x + width;
-                kocka.moveXspeed = 0;
-            }
-            if (moveYspeed == 0) {
-                if (kocka.y + kocka.height > y && kocka.y + kocka.height < y + kocka.moveYspeed - moveYspeed + 1) {
-                    kocka.y = y - kocka.height;
-                    kocka.moveYspeed = 0;
-                }
-                if (kocka.y < y + height && kocka.y > y + height + kocka.moveYspeed + moveYspeed - 1) {
-                    kocka.y = y + height;
-                    kocka.moveYspeed = 0;
-                }
-            }
-            if (moveYspeed < 0) {
-                if (kocka.y + kocka.height > y && kocka.y + kocka.height < y + kocka.moveYspeed - moveYspeed + 1) {
-                    kocka.y = y - kocka.height;
-                    kocka.moveYspeed = 0;
-                }
-                if (kocka.y < y + height && kocka.y > y + height + kocka.moveYspeed + moveYspeed - 1) {
-                    kocka.y = y + height;
-                    kocka.moveYspeed = 0;
-                }
-            }
-            if (moveYspeed > 0) {
-                if (kocka.y + kocka.height > y && kocka.y + kocka.height < y + kocka.moveYspeed + moveYspeed + 1) {
-                    kocka.y = y - kocka.height;
-                    kocka.moveYspeed = 0;
-                }
-                if (kocka.y < y + height && kocka.y > y + height + kocka.moveYspeed - moveYspeed - 1) {
-                    kocka.y = y + height;
-                    kocka.moveYspeed = 0;
-                }
-            }
-        }
-    };
-}
-function draw(kocka) {
-    return {
-        draw: (color) => {
-            if (kocka.collision)
-                kocka.color = 'blue';
-            else
-                kocka.color = 'red';
-            if (color == "black")
-                kocka.color = "black";
-            canvasCtx.fillStyle = kocka.color;
-            canvasCtx.fillRect(Math.round(kocka.x), Math.round(kocka.y), kocka.width, kocka.height);
-        }
-    };
-}
-function setMove(kocka) {
-    return {
-        setMove: (moveXspeed, moveYspeed, maxXspeed, maxYspeed) => {
-            kocka.moveYspeed += moveYspeed;
-            kocka.moveYspeed = Math.min(maxYspeed, Math.max(-maxYspeed, kocka.moveYspeed));
-            kocka.moveXspeed += moveXspeed;
-            kocka.moveXspeed = Math.min(maxXspeed, Math.max(-maxXspeed, kocka.moveXspeed));
-        }
-    };
-}
-function move(kocka) {
-    return {
-        move: (moveResistanceX, moveResistanceY) => {
-            kocka.y += kocka.moveYspeed;
-            kocka.x += kocka.moveXspeed;
-            //kocka.y = Math.round(kocka.y)
-            //kocka.x = Math.round(kocka.x)
-            if (kocka.moveYspeed < 0) {
-                kocka.moveYspeed += moveResistanceY;
-                kocka.moveYspeed = Math.min(0, kocka.moveYspeed);
-            }
-            if (kocka.moveYspeed > 0) {
-                kocka.moveYspeed -= moveResistanceY;
-                kocka.moveYspeed = Math.max(0, kocka.moveYspeed);
-            }
-            if (kocka.moveXspeed < 0) {
-                kocka.moveXspeed += moveResistanceY;
-                kocka.moveXspeed = Math.min(0, kocka.moveXspeed);
-            }
-            if (kocka.moveXspeed > 0) {
-                kocka.moveXspeed -= moveResistanceX;
-                kocka.moveXspeed = Math.max(0, kocka.moveXspeed);
-            }
-        }
-    };
 }
 //# sourceMappingURL=game.js.map

@@ -10,13 +10,14 @@ function inicializeMouse():void {
     mousePos.x = canvas.width/2;
     mousePos.y = canvas.height/2;
 
-    canvas.addEventListener("click", function () {
-    
-        if (!fullscreenActive) canvas.requestFullscreen()
-        if (!canvasPointerLock && fullscreenActive)
-            canvas.requestPointerLock();
+    if(needFullscreenToRun)
+        canvas.addEventListener("click", function () {
         
-    });
+            if (!fullscreenActive) canvas.requestFullscreen()
+            if (!canvasPointerLock && fullscreenActive && needMouseLockToRun )
+                canvas.requestPointerLock();
+            
+        });
 
     canvas.addEventListener("mousemove", calculateMouseCoordinates);
     canvas.addEventListener("mousedown", e => {
