@@ -10,3 +10,8 @@ zistim ze aha, ale aj tak to musim dat o generaciu vyssie. velmi zvazim, ci nero
 
 cely kolizny model je zly, no ale to si asi musim sam. zvazujem pozriet daky dostupny kod na gite. chcel by som to spravit
 od piky tak aby som tomu rozumel, ale mile rad sa necham inspirovat. aj dake videa su na to.
+
+pouzivanie globalnych premennych. vraj sa to nema robit, len je to take pohodlne
+
+tvaril som sa, ze idem preist na typescript, ale pouzivatm z toho iba deklaraciu typu premennych. import export nie, lebo
+neviem naco je to dobre. ale react to pouziva.
