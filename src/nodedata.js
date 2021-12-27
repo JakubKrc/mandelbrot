@@ -1,5 +1,5 @@
-const express = require('express');
-const mysql = require('mysql');
+const express = require('express');      //toto sa teraz ucim, tu som daco vyskusal a zatial som spokojny.
+const mysql = require('mysql');          //a ani som sa dako nesnazil ist cez typescript
 const cors = require('cors');
 
 const db = mysql.createConnection({
@@ -17,9 +17,12 @@ db.connect ((err) => {
 
 const app = express();
 
-app.use(cors({origin: '*'}));
+app.use(cors({origin: '*'}));          //mam podozrenie ze totok sa pouziva ked ides z inej ip adresy mat daky request, 
+                                        //mozno pri uploade to ani nebude treba. 
+                                        //len tu idem z live server extensie(klient) do nodemon(server)
 
-app.use(express.json());
+
+app.use(express.json());  
 
 app.post('/sendLevelData', (req, res) => {
 
@@ -34,10 +37,10 @@ app.post('/sendLevelData', (req, res) => {
 app.get('/getLevelData', (req,res) => {
 
     let sql = `SELECT Objects, Events FROM episode WHERE Name = 'SKUSKA'`;
-    db.query(sql, (err, result) => {
-        if(err) throw err;
-        res.send(result);
-        console.log("data send from server")
+    db.query(sql, (err, result) => {   //tusim ze to app.use(express.json()); to automaticky parse/stringify 
+        if(err) throw err;              //co ma trochu mrzuti je, ze bez toho to vobec neviem poslat, aj ked
+        res.send(result);               //mu zadam context-type: text/plain, to to proste zostringyfajovany json
+        console.log("data send from server")  //neposle ako string. ide to aj takto, len ma to iritovalo
     })
 
 });

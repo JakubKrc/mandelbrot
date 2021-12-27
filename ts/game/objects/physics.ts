@@ -1,8 +1,9 @@
-class rigidObj extends overlapObj {
-
-    moveYspeed:number; moveXspeed:number;
-    applyGravity:boolean;
-    immovable:boolean;
+class rigidObj extends overlapObj {    // toto je srdce enginu a samozrejme to co najviac blbne. budem to muset prerobit od zaciatku.
+                                        //dalo by sa to zdokonalit, ale nedorobim tam ovplyvnovanie objektov navzajom, prenansanie sily medzi nimi asi
+                                        //a interagovanie viacerych objektov. napr. ze jednu bednu potlacis, ale dve uz nie ked budu pri sebe
+    moveYspeed:number; moveXspeed:number;//resp. aj ano, ak budu dost lahke. este treba dorobit frikcie a odrazivost. Vodu. A vybuchy, resp.
+    applyGravity:boolean;                   //vektory kde sa bude sirit sila z jedneho bodu do vsetkych stran. Vsetko iba zo stvorcami a obdlznikmi. 
+    immovable:boolean;                      //na nic ine si ani nahodou netrufam. Ani sikme plochy tam asi nebudu, hoci to asi skusim.
 
     constructor(x:number, y:number, width:number, height:number, applyGravity: boolean, immovable:boolean){
         super(x, y, width, height);

@@ -1,11 +1,11 @@
 let keys = [];
 
-let pressedKeys:number[] = [];
+let pressedKeys:number[] = [];           //paci sa mi ako to cele funguje, len je to asi dost neefektivne
 let waitForKeyUp:boolean[] = [];
 
 function inicializeKeyboard():void {
 
-    keys['up']=['w','W'];
+    keys['up']=['w','W'];       //mozes mat viac znakov na jednu funkciu a zaroven to prehladne pouzit v kode, tesim sa
     keys['down']=['s','S'];
     keys['left']=['a',"A"];
     keys['right']=['d',"D"];
@@ -36,12 +36,12 @@ function inicializeKeyboard():void {
 function keyPressed(keyPressed:[]) : boolean{
     for(let key in keyPressed) {
         if(pressedKeys [keyPressed[key]] == 0) continue;
-        if(pressedKeys [keyPressed[key]] > 0 ) return true; 
+        if(pressedKeys [keyPressed[key]] > 0 ) return true;    //mozno ani netreba vacsie ako nula a ++ to, asi relikt
     }
     return false;
 }
 
-function keyPressedWaitForKeyUp(keyPressed:[]) : boolean{
+function keyPressedWaitForKeyUp(keyPressed:[]) : boolean{      //toto zareaguje iba ked klavesu pustis a stlacis znova, problem v predchadzajucej verzii
 
     for(let key in keyPressed) {
 

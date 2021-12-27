@@ -1,8 +1,8 @@
-let needFullscreenToRun = false;
-
-let scaleX:number, scaleY:number;
-let boundCanvas:{left:number, right:number, top:number, width:number, height:number};
-
+let needFullscreenToRun = false;     //toto je cele dost sialenstvo na ktore so dochadzal pokus omyl.
+                                    // prisposobuje to canvas prehliadacu aj ked je v okne, na celu obrazovku f11kou a
+let scaleX:number, scaleY:number;      //a na celu spustenu z kodu. zakazdym to trochu inac treba pocitat kvoli okrajom tusim
+let boundCanvas:{left:number, right:number, top:number, width:number, height:number}; //toto funguje myslim a tej matike uz nerozumiem
+                                                                                    //kiez to nebude treba prerabat!
 let canvas:any,canvasCtx:any;
 
 let canvasPointerLock = false;

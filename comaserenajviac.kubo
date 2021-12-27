@@ -1,0 +1,12 @@
+ze pouzivam eval(), lebo neviem ulozit vsetky infomacie do JSON. hlavne ak predavam ako parameter funkcie inu funkciu, co puzivam pri eventoch, 
+co je moj sposob ako pisat skripty. Ked budem chciet aby postavicka presla 50pixlov do prava a potom mala daku hlasku a tak.
+
+pochybnym sposobom vytahujem data z async funkcii node.js get ci post. jednak neviem co robim, jednak sa to robit asi nezvykne.
+budem to cele muset doseba viac integrovat, hlavne ak budem chciet pouzit react, si myslim. Ale neviem, na to sa vlastne teraz snazim
+priist, ale to riesim zvlast. 
+
+objekty. pride mi to zle, neviem zmysluplne delit tie objekty a robit z nich deti. vzdy nieco niekam napisem, a potom
+zistim ze aha, ale aj tak to musim dat o generaciu vyssie. velmi zvazim, ci nerozdelim data a funkcie, pozrem dake videa
+
+cely kolizny model je zly, no ale to si asi musim sam. zvazujem pozriet daky dostupny kod na gite. chcel by som to spravit
+od piky tak aby som tomu rozumel, ale mile rad sa necham inspirovat. aj dake videa su na to.

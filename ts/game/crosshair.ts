@@ -1,4 +1,4 @@
-class crosshairClass {
+class crosshairClass {   //funguje. ale teda ak to z tohoto vyzera, ze ovladam sinus cosinus, tak skor je to vysledok vela pokus omylov. ale funguje
 
     circleX:number; circleY:number;
     radius:number;

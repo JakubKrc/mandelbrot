@@ -13,13 +13,13 @@ function inicializeMouse():void {
     if(needFullscreenToRun)
         canvas.addEventListener("click", function () {
         
-            if (!fullscreenActive) canvas.requestFullscreen()
+            if (!fullscreenActive) canvas.requestFullscreen()    //aby si mohol vynutit fulcreen a lockmouse, holt musis dvakrat kliknut do prehliadacu.
             if (!canvasPointerLock && fullscreenActive && needMouseLockToRun )
                 canvas.requestPointerLock();
             
         });
 
-    canvas.addEventListener("mousemove", calculateMouseCoordinates);
+    canvas.addEventListener("mousemove", calculateMouseCoordinates);   //totok je dako predpripravene na drzanie objektov pri editore. ale bude to asi inak
     canvas.addEventListener("mousedown", e => {
         switch (e.button){
             case 0:
@@ -52,7 +52,7 @@ function inicializeMouse():void {
 
 }
 
-function calculateMouseCoordinates(e:any):void{
+function calculateMouseCoordinates(e:any):void{     //aj toto treba pocitat troma roznymi sposobmi. ale funguje nateraz uspokojivo, neviem co to robi uz
     if(needMouseLockToFollowMouse && !canvasPointerLock) return;
         
     boundCanvas = canvas.getBoundingClientRect();
