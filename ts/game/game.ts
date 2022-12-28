@@ -5,6 +5,8 @@ let selectedObject = 0;
 
 let fps = 60;
 let mainInterval = true;
+
+let mierkaZvacsenia = 50;
   
 window.onload = function () {
 
@@ -48,12 +50,12 @@ window.onload = function () {
     
 }*/
 
-function mandel(f:number, z:number):number{
-    return (z*z) + f;
+function mandel(f:number, c:number):number{
+    return (f*f) + c;
 }
 
-function mandelOpakoanyTest(f:number, mandelN:number):number{
-    let kolkoKratOpakovatMandla = 30;
+function mandelVybuchCiNie(f:number, mandelN:number):number{
+    let kolkoKratOpakovatMandla = 7;
     let pametajPoslednehoMandla = mandel(f, mandelN);
 
     for (let i=0; i<kolkoKratOpakovatMandla; i++){
@@ -61,6 +63,16 @@ function mandelOpakoanyTest(f:number, mandelN:number):number{
     }
 
     return pametajPoslednehoMandla;
+}
+
+function mandelOpakovaneKreslenie(f:number, mandelN:number){
+    let kolkoKratOpakovatMandla = 30;
+    let vysledokFunkcie = mandel(f, mandelN);
+
+    for (let i=0; i<kolkoKratOpakovatMandla; i++){
+        vysledokFunkcie = mandel(f,vysledokFunkcie);
+        canvasCtx.fillRect(100 + f*mierkaZvacsenia ,100 + vysledokFunkcie*mierkaZvacsenia,1,1);
+    }
 }
 
 function mainDraw(){
@@ -73,16 +85,18 @@ function mainDraw(){
         canvasCtx.fillRect(mousePos.x ,mousePos.y,6,6);	//kresli mysku
     }*/
 
-    let mierkaZvacsenia = 50;
-    let pametajPoslednehoMandla:number;
+    let vysledokFunkcie:number;
+
+    let c=0;
 
     canvasCtx.fillStyle='red';
-    for(let x=-2; x<2; x+=0.03)
-        for(let y=-2; y<2; y+=0.005){
-            pametajPoslednehoMandla = mandelOpakoanyTest(x,y);
+    for(let f=-1; f<1; f+=0.01)
+      /*  for(let c=-1; c<1; c+=0.01)*/{
+            vysledokFunkcie = mandelVybuchCiNie(f,c);
 
-            if(pametajPoslednehoMandla < 2)
-                canvasCtx.fillRect(300 + y*mierkaZvacsenia ,300 + x*mierkaZvacsenia,1,1);  
+            if(vysledokFunkcie < 1 && vysledokFunkcie > -1)
+                /*canvasCtx.fillRect(300 + f*mierkaZvacsenia ,300 + vysledokFunkcie,1,1); */
+                mandelOpakovaneKreslenie(f,c);
         }
 
     canvasCtx.fillStyle='blue';
