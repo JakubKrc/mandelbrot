@@ -1,8 +1,8 @@
 let keys = [];
-let pressedKeys = [];
+let pressedKeys = []; //paci sa mi ako to cele funguje, len je to asi dost neefektivne
 let waitForKeyUp = [];
 function inicializeKeyboard() {
-    keys['up'] = ['w', 'W'];
+    keys['up'] = ['w', 'W']; //mozes mat viac znakov na jednu funkciu a zaroven to prehladne pouzit v kode, tesim sa
     keys['down'] = ['s', 'S'];
     keys['left'] = ['a', "A"];
     keys['right'] = ['d', "D"];
@@ -29,7 +29,7 @@ function keyPressed(keyPressed) {
         if (pressedKeys[keyPressed[key]] == 0)
             continue;
         if (pressedKeys[keyPressed[key]] > 0)
-            return true;
+            return true; //mozno ani netreba vacsie ako nula a ++ to, asi relikt
     }
     return false;
 }

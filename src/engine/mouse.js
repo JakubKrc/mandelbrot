@@ -9,11 +9,11 @@ function inicializeMouse() {
     if (needFullscreenToRun)
         canvas.addEventListener("click", function () {
             if (!fullscreenActive)
-                canvas.requestFullscreen();
+                canvas.requestFullscreen(); //aby si mohol vynutit fulcreen a lockmouse, holt musis dvakrat kliknut do prehliadacu.
             if (!canvasPointerLock && fullscreenActive && needMouseLockToRun)
                 canvas.requestPointerLock();
         });
-    canvas.addEventListener("mousemove", calculateMouseCoordinates);
+    canvas.addEventListener("mousemove", calculateMouseCoordinates); //totok je dako predpripravene na drzanie objektov pri editore. ale bude to asi inak
     canvas.addEventListener("mousedown", e => {
         switch (e.button) {
             case 0:

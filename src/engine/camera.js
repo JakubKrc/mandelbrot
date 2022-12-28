@@ -5,7 +5,7 @@ class cameraClass extends rigidObj {
         this.moveYspeed = 0;
     }
     followObject(obj) {
-        let middleObjX = obj.x + obj.width / 2;
+        let middleObjX = obj.x + obj.width / 2; //cele este vyladim, mozno to ani nebudem riesti cez vektory. neviem
         let middleObjY = obj.y + obj.height / 2;
         if (this.x + canvas.width / 2 + 30 > middleObjX)
             this.addVector(Math.PI, 0.3);
