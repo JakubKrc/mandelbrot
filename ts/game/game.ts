@@ -1,8 +1,7 @@
 let gravity = 0.6;
 let obj:any = [];
 let selectedObject = 0;
-let crosshair = new crosshairClass(35,"orange");
-let camera = new cameraClass(0,0);
+//let camera = new cameraClass(0,0);
 
 let fps = 60;
 let mainInterval = true;
@@ -17,12 +16,12 @@ window.onload = function () {
     needMouseLockToRun = false;     // tiez neviem uplne preco, ale tie sa uplne odporucaju nepouzivat
                                     // lepsie vytvorit triedu gameEngine? kde to bude vsetko?
             
-    setInterval(mainCalculate ,1000/fps);       //toto bude treba prerobit, nejde to rovanko rychlo na vsetkych kompoch, je to na youtube
+    //setInterval(mainCalculate ,1/fps);       //toto bude treba prerobit, nejde to rovanko rychlo na vsetkych kompoch, je to na youtube
     mainDraw();        
 
 }
 
-function mainCalculate():void {
+/*function mainCalculate():void {
 
     if( keyPressedWaitForKeyUp ( keys['menu'] ) )     //pauzovanie. velmi som spokojny s jednoduchostou. v prvej verzii kubohry sa to ukazalo ako
                                                         //prekvapivy problem dorobit
@@ -45,8 +44,23 @@ function mainCalculate():void {
     if(keyPressedWaitForKeyUp(keys['e'])) selectedObject--
     selectedObject = Math.max(0, Math.min(selectedObject, obj.length - 1)) */  //moznost ovladat iny objekt, to v tej hre chcem mat, toto je len test, ktory to zlbne
 
-    eventsRun();            //spravi krok v eventoch
+   /* eventsRun();            //spravi krok v eventoch
     
+}*/
+
+function mandel(f:number, z:number):number{
+    return (z*z) + f;
+}
+
+function mandelOpakoanyTest(f:number, mandelN:number):number{
+    let kolkoKratOpakovatMandla = 30;
+    let pametajPoslednehoMandla = mandel(f, mandelN);
+
+    for (let i=0; i<kolkoKratOpakovatMandla; i++){
+        pametajPoslednehoMandla = mandel(f,pametajPoslednehoMandla);
+    }
+
+    return pametajPoslednehoMandla;
 }
 
 function mainDraw(){
@@ -54,15 +68,30 @@ function mainDraw(){
     canvasCtx.fillStyle='green';
     canvasCtx.fillRect(0,0,canvas.width,canvas.height)		
 
-    if(mouseInicialized){
+  /*  if(mouseInicialized){
         canvasCtx.fillStyle='yellow';
         canvasCtx.fillRect(mousePos.x ,mousePos.y,6,6);	//kresli mysku
-    }
+    }*/
+
+    let mierkaZvacsenia = 50;
+    let pametajPoslednehoMandla:number;
+
+    canvasCtx.fillStyle='red';
+    for(let x=-2; x<2; x+=0.03)
+        for(let y=-2; y<2; y+=0.005){
+            pametajPoslednehoMandla = mandelOpakoanyTest(x,y);
+
+            if(pametajPoslednehoMandla < 2)
+                canvasCtx.fillRect(300 + y*mierkaZvacsenia ,300 + x*mierkaZvacsenia,1,1);  
+        }
+
+    canvasCtx.fillStyle='blue';
+    canvasCtx.fillRect(300 ,300,6,6);
 
     fullscreenLockmouseMsg();   // ta upozornuje, ked ta to nuti zalokovat mys a dat do fulscreenu. teraz je to vypnute, ale ked to bude
                                 //vonku, tak sa to mas hrat jak na 486ke, nie v prehliadaci. v tom to je len kvoli dostupnosti.
                                 //ale moznost vykreslovat sirokouhlo to mat bude, hoci asi to nebude standardne nastavenie, neviem este
                                 //vlasne aj toto sa bude dat vypnut, ale vynada ti to pri tom
-    requestAnimationFrame(mainDraw);   //daky novy sposob vykreslovania na canvas. nemusis riesit fps ani sync s monitorom. rad som vyuzil
+   // requestAnimationFrame(mainDraw);   //daky novy sposob vykreslovania na canvas. nemusis riesit fps ani sync s monitorom. rad som vyuzil
 
 }

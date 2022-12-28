@@ -2,9 +2,40 @@
     <body>
         <script>
 
-			let ba = null;
-            console.log(  ba || 125);  //tu si blbnem, som chcel zistit co robi napr. toto. 
-                                        // trochu ma vytaca ze do gitignore neviem dat aj subory, asi to slahnem do dakej zlozky
+function mandel(f, z){
+    return (z*z) + f;
+}
+
+function mandelOpakoanyTest(f, mandelN){
+    let kolkoKratOpakovatMandla = 30;
+    let pametajPoslednehoMandla = mandel(f, mandelN);
+
+    for (let i=0; i<kolkoKratOpakovatMandla; i++){
+        pametajPoslednehoMandla = mandel(f,pametajPoslednehoMandla);
+    }
+
+    return pametajPoslednehoMandla;
+}
+
+window.onload = function (){
+
+    let mierkaZvacsenia = 50;
+    let pametajPoslednehoMandla;
+
+    for(x=-5.000; x<5.000; x+=0.005){
+        console.log(x);
+    }
+
+    for(let x=-2.000; x<2.000; x+=0.005)
+        for(let y=-2.000; y<2.000; y+=0.005){
+            pametajPoslednehoMandla = mandelOpakoanyTest(x,y);
+
+            console.log(x,y);
+
+            if(pametajPoslednehoMandla < 2)
+                canvasCtx.fillRect(150 + x*mierkaZvacsenia ,150 + y*mierkaZvacsenia,1,1);  
+        }
+}
 
         </script>
     </body>
