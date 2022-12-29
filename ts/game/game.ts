@@ -66,12 +66,13 @@ function mandelVybuchCiNie(f:number, mandelN:number):number{
 }
 
 function mandelOpakovaneKreslenie(f:number, mandelN:number){
-    let kolkoKratOpakovatMandla = 30;
+    let kolkoKratOpakovatMandla = 150;
     let vysledokFunkcie = mandel(f, mandelN);
 
     for (let i=0; i<kolkoKratOpakovatMandla; i++){
         vysledokFunkcie = mandel(f,vysledokFunkcie);
         canvasCtx.fillRect(100 + f*mierkaZvacsenia ,100 + vysledokFunkcie*mierkaZvacsenia,1,1);
+        console.log();
     }
 }
 
@@ -90,17 +91,19 @@ function mainDraw(){
     let c=0;
 
     canvasCtx.fillStyle='red';
-    for(let f=-1; f<1; f+=0.01)
-      /*  for(let c=-1; c<1; c+=0.01)*/{
+   /* for(let f=-1; f<1; f+=0.01)
+      /*  for(let c=-1; c<1; c+=0.01)*//*{
             vysledokFunkcie = mandelVybuchCiNie(f,c);
 
             if(vysledokFunkcie < 1 && vysledokFunkcie > -1)
                 /*canvasCtx.fillRect(300 + f*mierkaZvacsenia ,300 + vysledokFunkcie,1,1); */
-                mandelOpakovaneKreslenie(f,c);
-        }
+              //  mandelOpakovaneKreslenie(f,c);
+   //     }*/
+
+   mandelOpakovaneKreslenie(0.4,0.1);
 
     canvasCtx.fillStyle='blue';
-    canvasCtx.fillRect(300 ,300,6,6);
+    canvasCtx.fillRect(100 ,100,6,6);
 
     fullscreenLockmouseMsg();   // ta upozornuje, ked ta to nuti zalokovat mys a dat do fulscreenu. teraz je to vypnute, ale ked to bude
                                 //vonku, tak sa to mas hrat jak na 486ke, nie v prehliadaci. v tom to je len kvoli dostupnosti.
