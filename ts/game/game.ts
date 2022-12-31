@@ -2,7 +2,7 @@ let gravity = 0.6;
 let obj:any = [];
 let selectedObject = 0;
 
-let fps = 5;
+let fps = 15;
 let mainInterval = true;
 
 let hlavneCislo:complexImaginary = {
@@ -14,13 +14,16 @@ let cCislo:complexImaginary= {
     real : 0
 }
 
-let mierkaZvacsenia = 150;
+let mierkaZvacsenia = 300;
 let os = {
     x: 0,
     y: 0
 };
 
 let hlavnyImage = [];
+let drawAxis = false;
+let repeatStable = 10;
+let boundariesStable = 0.02;
   
 window.onload = function () {
 
@@ -36,24 +39,34 @@ window.onload = function () {
         hlavnyImage[i] = new Array();
     }
 
+    for(let x=0;x<canvas.width;x+=1)
+        for(let y=0;y<canvas.height;y+=1)
+            hlavnyImage[x][y]='black';
+
     os.x = canvas.width/2;
     os.y = canvas.height/2;
 
+    let hlupe=0;
     for(let x=-2;x<2;x+=0.01)
-            for(let y=-2;y<2;y+=0.01)
-                if (isStable({real:x,imaginary:y}))
-                    hlavnyImage[Math.round(os.x + x * mierkaZvacsenia)][Math.round(os.y + y * mierkaZvacsenia)] = true;
+        for(let y=-2;y<2;y+=0.01){
+            hlupe = isStable({real:x,imaginary:y});
+            if (hlupe<repeatStable)
+                hlavnyImage[Math.round(os.x + x * mierkaZvacsenia)][Math.round(os.y + y * mierkaZvacsenia)] = 'rgba('+50+','+50+','+(50+(hlupe*15))+',1)';
+            else hlavnyImage[Math.round(os.x + x * mierkaZvacsenia)][Math.round(os.y + y * mierkaZvacsenia)] = 'black'
+        }
+
 
     needFullscreenToRun = false;   // toto su globalne premenne, ked to bude hra, tak to bude vyzadovat fullscreen a lockmouse
     needMouseLockToRun = false;     // tiez neviem uplne preco, ale tie sa uplne odporucaju nepouzivat
                                     // lepsie vytvorit triedu gameEngine? kde to bude vsetko?
             
     setInterval(mainCalculate ,1000/fps);       //toto bude treba prerobit, nejde to rovanko rychlo na vsetkych kompoch, je to na youtube
-    setInterval(mainDraw ,1000/fps);         
+    setInterval(mainDraw ,1000/fps);        
+    
 
 }
 
-type complexImaginary = {real:number,imaginary:number};
+type complexImaginary = {real:number,imaginary:number}; 
 
 function squareComplexImaginary(z:complexImaginary){
     return {real : z.real * z.real - z.imaginary * z.imaginary,
@@ -68,20 +81,47 @@ function mandel(z:complexImaginary, c:complexImaginary):complexImaginary{
     return addComplexImaginary (squareComplexImaginary(z), c);
 }
 
-function isStable(z:complexImaginary):boolean{
+function isStable(z:complexImaginary):number{
+
+    let docasne:complexImaginary = {
+        real:z.real,
+        imaginary:z.imaginary
+    }
+    let pomocne = 0;
+
+    for(let i=0; i<repeatStable; i++){
+        if(docasne.real < -2 || docasne.real > 2 || docasne.imaginary < -2 || docasne.imaginary > 2)
+            return repeatStable;
+        docasne = mandel(docasne, cCislo);
+    }
+
+    do{
+
+        pomocne++;
+        docasne = mandel(docasne, cCislo);
+
+    } while ( (docasne.imaginary < cCislo.imaginary-boundariesStable || docasne.imaginary > cCislo.imaginary+boundariesStable)
+            && (docasne.real < cCislo.real-boundariesStable || docasne.real > cCislo.real+boundariesStable) && pomocne<repeatStable)
+
+    return pomocne;
+
+}
+
+/*function isStable(z:complexImaginary):number{
     let docasne:complexImaginary = {
         real:z.real,
         imaginary:z.imaginary
     }
 
-    for(let i=0; i<10; i++){
+    let i=0;
+    for(i=0; i<10; i++){
         if(docasne.real < -2 || docasne.real > 2 || docasne.imaginary < -2 || docasne.imaginary > 2)
-            return false;
+            return i;
         docasne = mandel(docasne, cCislo);
     }
 
-    return true;
-}
+    return i;
+}*/
 
 function opakovaneVykreslenie (z:complexImaginary){
     let docasne:complexImaginary = {
@@ -89,17 +129,42 @@ function opakovaneVykreslenie (z:complexImaginary){
         imaginary:z.imaginary
     }
 
-    canvasCtx.beginPath();
-    canvasCtx.moveTo(os.x + docasne.real * mierkaZvacsenia,os.y + docasne.imaginary * mierkaZvacsenia);
+    canvasCtx.lineWidth = canvas.width/400;
+    canvasCtx.strokeStyle = 'red';
 
-    for(let i=0; i<13; i++){
-        canvasCtx.fillRect(os.x + docasne.real * mierkaZvacsenia,os.y + docasne.imaginary * mierkaZvacsenia ,canvas.width/80, canvas.height/80);
+    let kolkokratsomzopakoval = 0;
+
+    do{
+        canvasCtx.beginPath();
+        canvasCtx.arc(os.x + docasne.real * mierkaZvacsenia,os.y + docasne.imaginary * mierkaZvacsenia, canvas.width/150, 0, 2 * Math.PI, false);
+        canvasCtx.stroke();
+
+        canvasCtx.beginPath();
+        canvasCtx.moveTo(os.x + docasne.real * mierkaZvacsenia,os.y + docasne.imaginary * mierkaZvacsenia);
+
         docasne = mandel(docasne, cCislo);
-        canvasCtx.lineTo(os.x + docasne.real * mierkaZvacsenia,os.y + docasne.imaginary * mierkaZvacsenia);
-    }
 
+        canvasCtx.lineTo(os.x + docasne.real * mierkaZvacsenia,os.y + docasne.imaginary * mierkaZvacsenia);
+        canvasCtx.stroke();
+
+        kolkokratsomzopakoval++;
+
+    } while ( (docasne.imaginary < cCislo.imaginary-boundariesStable || docasne.imaginary > cCislo.imaginary+boundariesStable)
+            && (docasne.real < cCislo.real-boundariesStable || docasne.real > cCislo.real+boundariesStable))
+
+    canvasCtx.beginPath();
+    canvasCtx.arc(os.x + cCislo.real * mierkaZvacsenia,os.y + cCislo.imaginary * mierkaZvacsenia, canvas.width/150, 0, 2 * Math.PI, false);
     canvasCtx.stroke();
 
+    canvasCtx.beginPath();
+    canvasCtx.moveTo(os.x + docasne.real * mierkaZvacsenia,os.y + docasne.imaginary * mierkaZvacsenia);
+    canvasCtx.lineTo(os.x + cCislo.real * mierkaZvacsenia,os.y + cCislo.imaginary * mierkaZvacsenia);
+    canvasCtx.stroke();
+
+    if (drawAxis) {
+        canvasCtx.font = "100px Arial";
+        canvasCtx.fillText(kolkokratsomzopakoval.toString(), 100, 100); 
+    }
 
 }
 
@@ -115,50 +180,76 @@ function mainCalculate():void {
     if(keyPressed(keys['fire'])) {
         hlavneCislo.real = (mousePos.x - os.x)/mierkaZvacsenia;
         hlavneCislo.imaginary = (mousePos.y - os.y)/mierkaZvacsenia;
+        vykresliEste = 0;
     } else {
         hlavneCislo.real = 0;
-        hlavneCislo.imaginary = 0;
+        hlavneCislo.imaginary = 0; 
     }
 
     if(keyPressed(keys['use'])){
         cCislo.real = (mousePos.x - os.x)/mierkaZvacsenia;
         cCislo.imaginary = (mousePos.y - os.y)/mierkaZvacsenia;
-        for(let x=-2;x<2;x+=0.01)
+        vykresliEste = 0;
+     /*   for(let x=-2;x<2;x+=0.01)
             for(let y=-2;y<2;y+=0.01)
-                    hlavnyImage[Math.round(os.x + x * mierkaZvacsenia)][Math.round(os.y + y * mierkaZvacsenia)] = false;
+                    hlavnyImage[Math.round(os.x + x * mierkaZvacsenia)][Math.round(os.y + y * mierkaZvacsenia)] = false;*/
+        let hlupe=0;
         for(let x=-2;x<2;x+=0.01)
-            for(let y=-2;y<2;y+=0.01)
-                if (isStable({real:x,imaginary:y}))
-                    hlavnyImage[Math.round(os.x + x * mierkaZvacsenia)][Math.round(os.y + y * mierkaZvacsenia)] = true;
+            for(let y=-2;y<2;y+=0.01){
+                hlupe = isStable({real:x,imaginary:y});
+                if (hlupe<repeatStable)
+                    hlavnyImage[Math.round(os.x + x * mierkaZvacsenia)][Math.round(os.y + y * mierkaZvacsenia)] = 'rgba('+50+','+50+','+(50+(hlupe*15))+',1)';
+                else hlavnyImage[Math.round(os.x + x * mierkaZvacsenia)][Math.round(os.y + y * mierkaZvacsenia)] = 'black'
+            }
+    }
+
+    if(keyPressedWaitForKeyUp(keys['x'])) {
+        drawAxis=!drawAxis;
+        vykresliEste=0;
     }
     
    // eventsRun();            //spravi krok v eventoch
     
 }
 
+let vykresliEste = 0;
+
 function mainDraw(){
 
-    canvasCtx.fillStyle='green';
-    canvasCtx.fillRect(0,0,canvas.width,canvas.height);
+    if(!keyPressed(keys['fire']) && !keyPressed(keys['use']) && vykresliEste>1){ 
+        return;
+    }
 
-    canvasCtx.fillStyle='orange';
+    vykresliEste++;
+
+    canvasCtx.fillStyle='black';
+    canvasCtx.fillRect(0,0,canvas.width,canvas.height);
+ 
     for(let x=0;x<canvas.width;x+=1)
         for(let y=0;y<canvas.height;y+=1)
-            if (hlavnyImage[x][y])
-                canvasCtx.fillRect(x,y,2, 2);
+            if (hlavnyImage[x][y]!=='black'){
+                canvasCtx.fillStyle=hlavnyImage[x][y];
+                canvasCtx.fillRect(x,y,3, 3)
+            }
 
-    canvasCtx.fillStyle='blue';
-    canvasCtx.fillRect(0, os.y , canvas.width , canvas.height/200);
-    canvasCtx.fillRect(os.x, 0 , canvas.width/200, canvas.height);
+ /*  for(let x=-2;x<2;x+=0.01)
+            for(let y=-2;y<2;y+=0.01){
+                let hlupe = isStable({real:x,imaginary:y});
+                if (hlupe < repeatStable){
+                    canvasCtx.fillStyle='rgba('+50+','+50+','+(50+(hlupe*15))+',1)';
+                    canvasCtx.fillRect(Math.round(os.x + x * mierkaZvacsenia),Math.round(os.y + y * mierkaZvacsenia),3,3);
+                }
+            }*/
 
+    if(drawAxis){                
+        canvasCtx.fillStyle='red';
+        canvasCtx.fillRect(0, os.y , canvas.width , canvas.height/400);
+        canvasCtx.fillRect(os.x, 0 , canvas.width/400, canvas.height);
+    }
+ 
     if(hlavneCislo.real!=0 && hlavneCislo.imaginary!=0){
         canvasCtx.fillStyle='red';
         opakovaneVykreslenie(hlavneCislo);
-    }
-
-    if(mouseInicialized){
-        canvasCtx.fillStyle='yellow';
-        canvasCtx.fillRect(mousePos.x ,mousePos.y,6,6);
     }
 
     fullscreenLockmouseMsg();  

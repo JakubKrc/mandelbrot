@@ -8,6 +8,7 @@ function inicializeKeyboard() {
     keys['right'] = ['d', "D"];
     keys['q'] = ['q', "Q"];
     keys['e'] = ['e', "E"];
+    keys['x'] = ['x', "X"];
     keys['jump'] = [' '];
     keys['menu'] = ['Delete', 'p', "P"];
     keys['fire'] = ['leftMouseButton'];
