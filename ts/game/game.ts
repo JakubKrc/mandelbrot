@@ -21,7 +21,7 @@ let os = {
 };
 
 let hlavnyImage = [];
-let drawAxis = false;
+let drawAxis = true;
 let repeatStable = 10;
 let boundariesStable = 0.02;
   
@@ -81,32 +81,6 @@ function mandel(z:complexImaginary, c:complexImaginary):complexImaginary{
     return addComplexImaginary (squareComplexImaginary(z), c);
 }
 
-function isStable(z:complexImaginary):number{
-
-    let docasne:complexImaginary = {
-        real:z.real,
-        imaginary:z.imaginary
-    }
-    let pomocne = 0;
-
-    for(let i=0; i<repeatStable; i++){
-        if(docasne.real < -2 || docasne.real > 2 || docasne.imaginary < -2 || docasne.imaginary > 2)
-            return repeatStable;
-        docasne = mandel(docasne, cCislo);
-    }
-
-    do{
-
-        pomocne++;
-        docasne = mandel(docasne, cCislo);
-
-    } while ( (docasne.imaginary < cCislo.imaginary-boundariesStable || docasne.imaginary > cCislo.imaginary+boundariesStable)
-            && (docasne.real < cCislo.real-boundariesStable || docasne.real > cCislo.real+boundariesStable) && pomocne<repeatStable)
-
-    return pomocne;
-
-}
-
 /*function isStable(z:complexImaginary):number{
     let docasne:complexImaginary = {
         real:z.real,
@@ -122,51 +96,6 @@ function isStable(z:complexImaginary):number{
 
     return i;
 }*/
-
-function opakovaneVykreslenie (z:complexImaginary){
-    let docasne:complexImaginary = {
-        real:z.real,
-        imaginary:z.imaginary
-    }
-
-    canvasCtx.lineWidth = canvas.width/400;
-    canvasCtx.strokeStyle = 'red';
-
-    let kolkokratsomzopakoval = 0;
-
-    do{
-        canvasCtx.beginPath();
-        canvasCtx.arc(os.x + docasne.real * mierkaZvacsenia,os.y + docasne.imaginary * mierkaZvacsenia, canvas.width/150, 0, 2 * Math.PI, false);
-        canvasCtx.stroke();
-
-        canvasCtx.beginPath();
-        canvasCtx.moveTo(os.x + docasne.real * mierkaZvacsenia,os.y + docasne.imaginary * mierkaZvacsenia);
-
-        docasne = mandel(docasne, cCislo);
-
-        canvasCtx.lineTo(os.x + docasne.real * mierkaZvacsenia,os.y + docasne.imaginary * mierkaZvacsenia);
-        canvasCtx.stroke();
-
-        kolkokratsomzopakoval++;
-
-    } while ( (docasne.imaginary < cCislo.imaginary-boundariesStable || docasne.imaginary > cCislo.imaginary+boundariesStable)
-            && (docasne.real < cCislo.real-boundariesStable || docasne.real > cCislo.real+boundariesStable))
-
-    canvasCtx.beginPath();
-    canvasCtx.arc(os.x + cCislo.real * mierkaZvacsenia,os.y + cCislo.imaginary * mierkaZvacsenia, canvas.width/150, 0, 2 * Math.PI, false);
-    canvasCtx.stroke();
-
-    canvasCtx.beginPath();
-    canvasCtx.moveTo(os.x + docasne.real * mierkaZvacsenia,os.y + docasne.imaginary * mierkaZvacsenia);
-    canvasCtx.lineTo(os.x + cCislo.real * mierkaZvacsenia,os.y + cCislo.imaginary * mierkaZvacsenia);
-    canvasCtx.stroke();
-
-    if (drawAxis) {
-        canvasCtx.font = "100px Arial";
-        canvasCtx.fillText(kolkokratsomzopakoval.toString(), 100, 100); 
-    }
-
-}
 
 function mainCalculate():void {
 
@@ -247,10 +176,8 @@ function mainDraw(){
         canvasCtx.fillRect(os.x, 0 , canvas.width/400, canvas.height);
     }
  
-    if(hlavneCislo.real!=0 && hlavneCislo.imaginary!=0){
-        canvasCtx.fillStyle='red';
+    if(hlavneCislo.real!=0 && hlavneCislo.imaginary!=0)
         opakovaneVykreslenie(hlavneCislo);
-    }
 
     fullscreenLockmouseMsg();  
 
