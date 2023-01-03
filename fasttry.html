@@ -2,40 +2,21 @@
     <body>
         <script>
 
-function mandel(f, z){
-    return (z*z) + f;
+function lala( {x:x2, y:y2} ){
+
+    x2+=x2;
+    y2+=y2;
+
+    return {x2, y2};
+
 }
 
-function mandelOpakoanyTest(f, mandelN){
-    let kolkoKratOpakovatMandla = 30;
-    let pametajPoslednehoMandla = mandel(f, mandelN);
-
-    for (let i=0; i<kolkoKratOpakovatMandla; i++){
-        pametajPoslednehoMandla = mandel(f,pametajPoslednehoMandla);
-    }
-
-    return pametajPoslednehoMandla;
+window.onload(){
+    let s,d;
+    {x2:s; y2:d} = lala( {2,4} );
+    console.log(s,d);
 }
 
-window.onload = function (){
-
-    let mierkaZvacsenia = 50;
-    let pametajPoslednehoMandla;
-
-    for(x=-5.000; x<5.000; x+=0.005){
-        console.log(x);
-    }
-
-    for(let x=-2.000; x<2.000; x+=0.005)
-        for(let y=-2.000; y<2.000; y+=0.005){
-            pametajPoslednehoMandla = mandelOpakoanyTest(x,y);
-
-            console.log(x,y);
-
-            if(pametajPoslednehoMandla < 2)
-                canvasCtx.fillRect(150 + x*mierkaZvacsenia ,150 + y*mierkaZvacsenia,1,1);  
-        }
-}
 
         </script>
     </body>
