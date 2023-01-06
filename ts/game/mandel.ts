@@ -1,28 +1,24 @@
-function isStable(z:complexImaginary):number{
+/*function isStable({real:real, imaginary:imaginary}):number{
 
-    let docasne:complexImaginary = {
-        real:z.real,
-        imaginary:z.imaginary
-    }
-    let pomocne = 0;
+    let kolkokratsomzopakoval = 0;
 
     for(let i=0; i<repeatStable; i++){
-        if(docasne.real < -2 || docasne.real > 2 || docasne.imaginary < -2 || docasne.imaginary > 2)
+        if(real < -2 || real > 2 || imaginary < -2 || imaginary > 2)
             return repeatStable;
-        docasne = mandel(docasne, cCislo);
+        ({real, imaginary} = mandel( {real, imaginary} , cCislo));
     }
 
     do{
 
-        pomocne++;
-        docasne = mandel(docasne, cCislo);
+        kolkokratsomzopakoval++;
+        ({real, imaginary} = mandel( {real, imaginary} , cCislo));
 
-    } while ( (docasne.imaginary < cCislo.imaginary-boundariesStable || docasne.imaginary > cCislo.imaginary+boundariesStable)
-            && (docasne.real < cCislo.real-boundariesStable || docasne.real > cCislo.real+boundariesStable) && pomocne<repeatStable)
+    } while ( (imaginary < cCislo.imaginary-boundariesStable || imaginary > cCislo.imaginary+boundariesStable)
+            && (real < cCislo.real-boundariesStable || real > cCislo.real+boundariesStable) && kolkokratsomzopakoval<repeatStable)
 
-    return pomocne;
+    return kolkokratsomzopakoval;
 
-}
+}*/
 
 function nakresliKruh(x:number, y:number){
 
@@ -35,32 +31,44 @@ function nakresliKruh(x:number, y:number){
 
 }
 
-function opakovaneVykreslenie ( { real:real, imaginary:imaginary} ){
+function opakovaneVykreslenie ( { real:real, imaginary:imaginary}, vykreslit:boolean ){
 
-    canvasCtx.lineWidth = canvas.width/400;
-    canvasCtx.strokeStyle = 'red';
+    if(vykreslit) {
+        canvasCtx.lineWidth = canvas.width/400;
+        canvasCtx.strokeStyle = 'red';
+    }
 
     let kolkokratsomzopakoval = 0;
 
     do{
 
-        nakresliKruh(os.x + real * mierkaZvacsenia,os.y + imaginary * mierkaZvacsenia);
+        if(vykreslit) nakresliKruh(os.x + real * mierkaZvacsenia,os.y + imaginary * mierkaZvacsenia);
 
         ({real, imaginary} = mandel( {real, imaginary} , cCislo));
 
-        canvasCtx.lineTo(os.x + real * mierkaZvacsenia,os.y + imaginary * mierkaZvacsenia);
-        canvasCtx.stroke();
+        if(vykreslit){
+            canvasCtx.lineTo(os.x + real * mierkaZvacsenia,os.y + imaginary * mierkaZvacsenia);
+            canvasCtx.stroke();
+        }
 
         kolkokratsomzopakoval++;
 
     } while ( (imaginary < cCislo.imaginary-boundariesStable || imaginary > cCislo.imaginary+boundariesStable)
-            && (real < cCislo.real-boundariesStable || real > cCislo.real+boundariesStable))
+            && (real < cCislo.real-boundariesStable || real > cCislo.real+boundariesStable) && kolkokratsomzopakoval<repeatStable)
 
-    nakresliKruh(os.x + cCislo.real * mierkaZvacsenia,os.y + cCislo.imaginary * mierkaZvacsenia);
-
-    if (drawAxis) {
-        canvasCtx.font = "100px Arial";
-        canvasCtx.fillText(kolkokratsomzopakoval.toString(), 100, 100); 
+    
+    if(vykreslit){
+        nakresliKruh(os.x + real * mierkaZvacsenia,os.y + imaginary * mierkaZvacsenia);
+        canvasCtx.lineTo(os.x + cCislo.real * mierkaZvacsenia,os.y + cCislo.imaginary * mierkaZvacsenia);
+        canvasCtx.stroke();
+        nakresliKruh(os.x + cCislo.real * mierkaZvacsenia,os.y + cCislo.imaginary * mierkaZvacsenia);
     }
+
+    if (drawAxis && vykreslit) {
+        canvasCtx.font = "100px Arial";
+        canvasCtx.fillText((kolkokratsomzopakoval+1).toString(), 100, 100); 
+    }
+
+    return kolkokratsomzopakoval;
 
 }

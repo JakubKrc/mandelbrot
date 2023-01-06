@@ -9,11 +9,12 @@ function inicializeKeyboard() {
     keys['q'] = ['q', "Q"];
     keys['e'] = ['e', "E"];
     keys['x'] = ['x', "X"];
+    keys['c'] = ['c', "C"];
     keys['jump'] = [' '];
     keys['menu'] = ['Delete', 'p', "P"];
     keys['fire'] = ['leftMouseButton'];
     keys['use'] = ['rightMouseButton'];
-    keys['bla'] = ['middleMouseButton'];
+    keys['mid'] = ['middleMouseButton'];
     for (let key in keys)
         for (let key2 in keys[key]) {
             pressedKeys[keys[key][key2]] = 0;
