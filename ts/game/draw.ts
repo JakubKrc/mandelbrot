@@ -1,15 +1,34 @@
-let howManyPixelsToFillTheGap=3;
+let mierkaZvacsenia:number;
+let spaceBetweePixels:number;
+let mieraZoomu:number;
+let howMuchFromSetX:number;
+let howMuchFromSetY:number;
+let drawPoints=false;
 
-function putPixelIntoMainImage(x:number, y:number, color:number){
+function calculateResolution(){
 
-    for (let x2=0; x2<howManyPixelsToFillTheGap; x2++ )
-        for (let y2=0; y2<howManyPixelsToFillTheGap; y2++)
-            mainImage[x + x2][y + y2] = color;
-
+    spaceBetweePixels = (1/mierkaZvacsenia);
+    canvas.width = ((mierkaZvacsenia * (4/mieraZoomu))/9)*16;
+    canvas.height = mierkaZvacsenia * (4/mieraZoomu);
+    howMuchFromSetX = (2 + ((2/9) * 7)) * (1/mieraZoomu);
+    howMuchFromSetY = 2 * (1/mieraZoomu);
+    os.x = canvas.width/2;
+    os.y = canvas.height/2;
+    mainImage = canvasCtx.createImageData(canvas.width, canvas.height);
+    fitCanvasToBrowser();
 }
 
 function calculateMainImage(){
-    for(let x=-2;x<2;x+=0.01)
-        for(let y=-2;y<2;y+=0.01)
-            putPixelIntoMainImage(Math.round(os.x + x * mierkaZvacsenia),Math.round(os.y + y * mierkaZvacsenia),opakovaneVykreslenie({real:x,imaginary:y}, false));
+    for(let x = -howMuchFromSetX; x< howMuchFromSetX - spaceBetweePixels; x+=spaceBetweePixels)
+        for(let y =-howMuchFromSetY; y<howMuchFromSetY; y+=spaceBetweePixels)
+            putPixelIntoMainImage(Math.round(os.y + y * mierkaZvacsenia),Math.round(os.x + x * mierkaZvacsenia),opakovaneVykreslenie({real:x,imaginary:y}, false));
+}
+
+function putPixelIntoMainImage(x:number, y:number, color:number){
+
+    mainImage.data[(x * canvas.width * 4) + (y * 4) + 0] = 12 + (3*color);
+    mainImage.data[(x * canvas.width * 4) + (y * 4) + 1] = 12 + (2*color);
+    mainImage.data[(x * canvas.width * 4) + (y * 4) + 2] = 60 + (4*color);
+    mainImage.data[(x * canvas.width * 4) + (y * 4) + 3] = 255;
+
 }

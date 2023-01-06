@@ -13,6 +13,7 @@ function inicializeKeyboard():void {
     keys['e']=['e',"E"];
     keys['x']=['x',"X"];
     keys['c']=['c',"C"];
+    keys['m']=['m',"M"];
     keys['jump']=[' '];
     keys['menu']=['Delete','p',"P"];
     keys['fire']=['leftMouseButton'];

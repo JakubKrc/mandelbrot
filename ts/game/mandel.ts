@@ -20,6 +20,19 @@
 
 }*/
 
+function squareComplexImaginary(z:complexImaginary){
+    return {real : z.real * z.real - z.imaginary * z.imaginary,
+            imaginary : 2*z.real*z.imaginary}
+}
+
+function addComplexImaginary(x:complexImaginary,y:complexImaginary){
+    return {real: x.real+y.real, imaginary: x.imaginary+y.imaginary};
+}
+
+function mandel(z:complexImaginary, c:complexImaginary):complexImaginary{
+    return addComplexImaginary (squareComplexImaginary(z), c);
+}
+
 function nakresliKruh(x:number, y:number){
 
     canvasCtx.beginPath();
@@ -62,11 +75,6 @@ function opakovaneVykreslenie ( { real:real, imaginary:imaginary}, vykreslit:boo
         canvasCtx.lineTo(os.x + cCislo.real * mierkaZvacsenia,os.y + cCislo.imaginary * mierkaZvacsenia);
         canvasCtx.stroke();
         nakresliKruh(os.x + cCislo.real * mierkaZvacsenia,os.y + cCislo.imaginary * mierkaZvacsenia);
-    }
-
-    if (drawAxis && vykreslit) {
-        canvasCtx.font = "100px Arial";
-        canvasCtx.fillText((kolkokratsomzopakoval+1).toString(), 100, 100); 
     }
 
     return kolkokratsomzopakoval;

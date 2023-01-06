@@ -2,7 +2,7 @@ let os = {
     x: 0,
     y: 0
 };
-let axis = true;
+let axis = false;
 
 function drawAxis(){
     canvasCtx.fillStyle='green';
@@ -12,7 +12,8 @@ function drawAxis(){
     canvasCtx.lineWidth = canvas.width/400;
     nakresliKruh(os.x + cCislo.real*mierkaZvacsenia,os.y+cCislo.imaginary*mierkaZvacsenia);
     canvasCtx.moveTo(os.x,os.y);
-    canvasCtx.arc(os.x,os.y, 2*mierkaZvacsenia, 0, 2 * Math.PI, false);
+    canvasCtx.arc(os.x,os.y, mierkaZvacsenia, 0, 2 * Math.PI, false);
     canvasCtx.stroke();
-    opakovaneVykreslenie(hlavneCislo, true);
+    canvasCtx.font = canvas.height/10+'px Arial';
+    canvasCtx.fillText((opakovaneVykreslenie(hlavneCislo, drawPoints)+1).toString(), canvas.width/23, canvas.height/10); 
 }

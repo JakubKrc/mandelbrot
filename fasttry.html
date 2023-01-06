@@ -1,23 +1,38 @@
+<!DOCTYPE html>
 <html>
-    <body>
-        <script>
+<head>
+  <title>Julia Set</title>
+</head>
+<body>
+  <canvas id="myCanvas" width="800" height="600"></canvas>
 
-function lala( {x:x2, y:y2} ){
+  <script>
+    const canvas = document.getElementById("myCanvas");
+    const ctx = canvas.getContext("2d");
 
-    x2+=x2;
-    y2+=y2;
+    const width = canvas.width;
+    const height = canvas.height;
 
-    return {x2, y2};
+    const i = Math.sqrt(-1);
+    console.log(i);
+    const c = -0.8 + 0.156 * i;  // Julia set constant
+    const maxIterations = 100;   // maximum number of iterations
+    const threshold = 2;         // maximum magnitude allowed
 
-}
-
-window.onload(){
-    let s,d;
-    {x2:s; y2:d} = lala( {2,4} );
-    console.log(s,d);
-}
-
-
-        </script>
-    </body>
+    for (let x = 0; x < width; x++) {
+      for (let y = 0; y < height; y++) {
+        const z = (x / width - 0.5) + (y / height - 0.5) * i;  // map pixel to complex plane
+        let zn = z;
+        for (let n = 0; n < maxIterations; n++) {
+          zn = zn * zn + c;
+          if (Math.abs(zn) > threshold) {
+            ctx.fillStyle = `hsl(${n}, 100%, 50%)`;
+            ctx.fillRect(x, y, 1, 1);
+            break;
+          }
+        }
+      }
+    }
+  </script>
+</body>
 </html>

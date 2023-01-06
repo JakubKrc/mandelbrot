@@ -10,27 +10,25 @@ let cCislo:complexImaginary = {
     real : 0
 }
 
-let mierkaZvacsenia = 300;
-
-let mainImage = [];
-let repeatStable = 60;
+let mainImage : any;
+let repeatStable = 150;
 let boundariesStable = 0;
 let colorOfCoordinates = 0;
   
 window.onload = function () {
 
-    document.getElementById("canvas").addEventListener("contextmenu", function(event){
+    inicializeCanvas("canvas");
+
+    mieraZoomu = 2;
+    mierkaZvacsenia = 150;
+    calculateResolution();
+
+    document.addEventListener("contextmenu", function(event){
         event.preventDefault();
     });
 
     inicializeKeyboard();
-    inicializeCanvas("canvas");
     inicializeMouse();
-
-    mainImage = Array(canvas.width).fill(0).map(() => Array(canvas.height).fill(repeatStable));
-
-    os.x = canvas.width/2;
-    os.y = canvas.height/2;
 
     calculateMainImage();
 
@@ -44,19 +42,6 @@ window.onload = function () {
 }
 
 type complexImaginary = {real:number,imaginary:number}; 
-
-function squareComplexImaginary(z:complexImaginary){
-    return {real : z.real * z.real - z.imaginary * z.imaginary,
-            imaginary : 2*z.real*z.imaginary}
-}
-
-function addComplexImaginary(x:complexImaginary,y:complexImaginary){
-    return {real: x.real+y.real, imaginary: x.imaginary+y.imaginary};
-}
-
-function mandel(z:complexImaginary, c:complexImaginary):complexImaginary{
-    return addComplexImaginary (squareComplexImaginary(z), c);
-}
 
 function mainCalculate():void {
 
@@ -85,14 +70,13 @@ function mainCalculate():void {
         vykresliEste=0;
     }
 
+    if(keyPressedWaitForKeyUp(keys['m'])) toggleLabel();
+
     canvas.addEventListener('mousemove', () => {
         
-        document.getElementById('label').innerHTML = mainImage[Math.floor(mousePos.x)][Math.floor(mousePos.y)].toString();
+      //  document.getElementById('label').innerHTML = mainImage[Math.floor(mousePos.x)][Math.floor(mousePos.y)].toString();
 
     });
-
-    if(keyPressedWaitForKeyUp(keys['c'])) console.log(mainImage);
-
     
    // eventsRun();            //spravi krok v eventoch
     
@@ -110,13 +94,8 @@ function mainDraw(){
 
     canvasCtx.fillStyle='black';
     canvasCtx.fillRect(0,0,canvas.width,canvas.height);
- 
-    for(let x=0;x<canvas.width;x+=1)
-        for(let y=0;y<canvas.height;y+=1)
-            if (mainImage[x][y]!==repeatStable){
-                canvasCtx.fillStyle='rgba('+(12+(3*mainImage[x][y])).toString()+','+(12+(3*mainImage[x][y])).toString()+','+(60+(5*mainImage[x][y])).toString()+',1)';
-                canvasCtx.fillRect(x,y,1, 1);
-            }
+
+    canvasCtx.putImageData(mainImage, 0, 0)
 
     if(axis) drawAxis();
 
