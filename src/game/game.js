@@ -11,12 +11,13 @@ let cCislo = {
 let mainImage;
 let repeatStable = 150;
 let boundariesStable = 0;
-let colorOfCoordinates = 0;
+;
+let vykresliEste;
 window.onload = function () {
     inicializeCanvas("canvas");
     mieraZoomu = 2;
     mierkaZvacsenia = 150;
-    calculateResolution();
+    mainReset();
     document.addEventListener("contextmenu", function (event) {
         event.preventDefault();
     });
@@ -57,7 +58,6 @@ function mainCalculate() {
     });
     // eventsRun();            //spravi krok v eventoch
 }
-let vykresliEste = 0;
 function mainDraw() {
     if (!keyPressed(keys['fire']) && !keyPressed(keys['use']) && vykresliEste > 1) {
         return;

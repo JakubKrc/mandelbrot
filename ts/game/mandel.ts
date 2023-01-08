@@ -1,25 +1,3 @@
-/*function isStable({real:real, imaginary:imaginary}):number{
-
-    let kolkokratsomzopakoval = 0;
-
-    for(let i=0; i<repeatStable; i++){
-        if(real < -2 || real > 2 || imaginary < -2 || imaginary > 2)
-            return repeatStable;
-        ({real, imaginary} = mandel( {real, imaginary} , cCislo));
-    }
-
-    do{
-
-        kolkokratsomzopakoval++;
-        ({real, imaginary} = mandel( {real, imaginary} , cCislo));
-
-    } while ( (imaginary < cCislo.imaginary-boundariesStable || imaginary > cCislo.imaginary+boundariesStable)
-            && (real < cCislo.real-boundariesStable || real > cCislo.real+boundariesStable) && kolkokratsomzopakoval<repeatStable)
-
-    return kolkokratsomzopakoval;
-
-}*/
-
 function squareComplexImaginary(z:complexImaginary){
     return {real : z.real * z.real - z.imaginary * z.imaginary,
             imaginary : 2*z.real*z.imaginary}

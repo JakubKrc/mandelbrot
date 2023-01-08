@@ -12,8 +12,9 @@ let cCislo:complexImaginary = {
 
 let mainImage : any;
 let repeatStable = 150;
-let boundariesStable = 0;
-let colorOfCoordinates = 0;
+let boundariesStable = 0;;
+let vykresliEste:number;
+
   
 window.onload = function () {
 
@@ -21,7 +22,7 @@ window.onload = function () {
 
     mieraZoomu = 2;
     mierkaZvacsenia = 150;
-    calculateResolution();
+    mainReset();
 
     document.addEventListener("contextmenu", function(event){
         event.preventDefault();
@@ -82,8 +83,6 @@ function mainCalculate():void {
     
 }
 
-let vykresliEste = 0;
-
 function mainDraw(){
 
     if(!keyPressed(keys['fire']) && !keyPressed(keys['use']) && vykresliEste>1){ 
@@ -95,7 +94,7 @@ function mainDraw(){
     canvasCtx.fillStyle='black';
     canvasCtx.fillRect(0,0,canvas.width,canvas.height);
 
-    canvasCtx.putImageData(mainImage, 0, 0)
+    canvasCtx.putImageData(mainImage, 0, 0);
 
     if(axis) drawAxis();
 

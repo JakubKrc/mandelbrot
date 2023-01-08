@@ -10,18 +10,29 @@ document.querySelector("#label").addEventListener("submit", (event) => {
     vykresliEste = 0;
     document.querySelector("#label").style.display = 'none';
 });
-document.querySelectorAll("#zoom, #zvacsenie, #cR, #cI").forEach(() => addEventListener("input", function (event) {
-    this.document.querySelector('#cRnumber').value = parseFloat(document.querySelector("#cR").value).toFixed(2);
-    this.document.querySelector('#cInumber').value = parseFloat(document.querySelector("#cI").value).toFixed(2);
-    if (!drawRealTime)
-        return;
-    mieraZoomu = parseFloat(document.querySelector("#zoom").value);
-    mierkaZvacsenia = parseFloat(document.querySelector("#zvacsenie").value);
-    cCislo.real = parseFloat(document.querySelector("#cR").value);
-    cCislo.imaginary = parseFloat(document.querySelector("#cI").value);
+//nepouziiiiiiiivattttttttt
+function mainReset() {
     calculateResolution();
     calculateMainImage();
     vykresliEste = 0;
+}
+document.querySelectorAll("body").forEach(() => addEventListener("input", function (event) {
+    mieraZoomu = parseFloat(document.querySelector("#zoom").value);
+    mierkaZvacsenia = parseFloat(document.querySelector("#zvacsenie").value);
+    if (cCislo.real != parseFloat(document.querySelector("#cR").value)) {
+        this.document.querySelector('#cRnumber').value = parseFloat(document.querySelector("#cR").value).toFixed(2);
+        cCislo.real = parseFloat(document.querySelector("#cR").value);
+    }
+    if (cCislo.imaginary != parseFloat(document.querySelector("#cI").value)) {
+        this.document.querySelector('#cInumber').value = parseFloat(document.querySelector("#cI").value).toFixed(2);
+        cCislo.imaginary = parseFloat(document.querySelector("#cI").value);
+    }
+    cCislo.real = parseFloat(document.querySelector("#cRnumber").value);
+    cCislo.imaginary = parseFloat(document.querySelector("#cInumber").value);
+    console.log(cCislo);
+    if (!drawRealTime)
+        return;
+    mainReset();
 }));
 document.querySelector("#axisCheck").addEventListener('change', () => {
     axis = !axis;
