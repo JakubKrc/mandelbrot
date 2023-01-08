@@ -11,8 +11,11 @@ function inicializeKeyboard() {
     keys['x'] = ['x', "X"];
     keys['c'] = ['c', "C"];
     keys['m'] = ['m', "M"];
+    keys['v'] = ['v', "V"];
+    keys['p'] = ['p', "P"];
+    keys['i'] = ['i', "I"];
     keys['jump'] = [' '];
-    keys['menu'] = ['Delete', 'p', "P"];
+    keys['menu'] = ['Delete'];
     keys['fire'] = ['leftMouseButton'];
     keys['use'] = ['rightMouseButton'];
     keys['mid'] = ['middleMouseButton'];

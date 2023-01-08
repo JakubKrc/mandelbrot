@@ -20,42 +20,85 @@
 	body {
 		background-color:	black;
 		margin:				0;
-	} 
-
-	#label {
-		display: none;
-		position: absolute;
-		font-size:2em;
-		color: #991;
-		top: 50%;
-  		left: 50%;
-  		transform: translate(-50%, -50%);
-		width:30%;
-		height: 70%;
-		background-color:rgba(157, 158, 94, 0.5);
-		border-radius: 20px;
-  		box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
-		padding: 1.3em;
-  		transition: all 0.5s ease-in-out;
-	}
-	#label:hover {
-    		box-shadow: 0px 0px 25px rgba(47, 97, 23, 0.8);
-			width: 33%;
-			height: 75%;
-  	}
-
-	#menuButton {
-		position: absolute;
-		top: 90%;
-		left: 10%;
+		overflow: 			hidden;
 	}
 
-	.container {
+	.container-menu {
 		text-align: center;
 	}
 
+	.menu {
+		position: absolute;
+		font-size:3.5vh;
+		color: #991;
+		top: 50%;
+		width:45%;
+		/*height: 70%;*/
+		background-color:rgba(157, 158, 94, 0.5);
+		border-radius: 20px;
+  		box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+		padding: 1.0em;
+  		transition: all 0.7s ease-in-out;
+		display: flex;
+		flex-direction: column;
+		overflow-y: hidden;
+	}
+	.container-menu .mainMenu{
+		left: 0%;
+		transform: translate(-100%, -50%);
+	}
+	.container-menu .presetsMenu{
+		left: 100%;
+		transform: translate(100%, -50%);
+	}
+	.container-menu .open {
+		left: 50%;
+  		transform: translate(-50%, -50%);
+	}
+	.menu:hover {
+    		box-shadow: 0px 0px 25px rgba(10, 28, 2, 0.8);
+  	}
+
+	.container-menu .runner{
+		transform: translate(-12%, 0);
+	}
+
+	#menuButtonToggle {
+		position: absolute;
+		top: 87%;
+		left: 3%;
+	}
+
+	#presetsButtonToggle {
+		position: absolute;
+		top: 87%;
+		left: 86%;
+	}
+
 	button {
-		font-size: 2em;
+		color:rgb(140, 93, 31);
+		font-family: Arial, Helvetica, sans-serif;
+		font-weight: bold;
+		font-size: 4vh;
+		background-color:lightgoldenrodyellow;
+		border-radius: 10px;
+  		box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+		padding: 0.3em;
+	}
+
+	button:hover{
+		cursor: pointer;
+	}
+
+	input[type="range"]{
+		width:60%;
+		transform: scale(0.5) translate(45%, 65%);
+	}
+
+	input[type="number"]{
+		background-color: rgb(129, 129, 46);
+		width:15%;
+		margin: 2%;
 	}
 	
 </style>
@@ -64,28 +107,53 @@
 	
 	<canvas id="canvas"></canvas>
 
-	<div class="container">
-		<form id="label">
-			Zoom 0.5 - 4.5
-			<input type="range" id="zoom" min="0.5" max="4.5" step="0.01"></input><br>
-			Detail 5 - 400
-			<input type="range" id="zvacsenie" min="5" max="400"></input><br>
-			<input type="checkbox" id="axisCheck" >Axis
-			<input type="checkbox" id="pointsCheck" >Points
-			<input type="checkbox" id="drawRealTime" >Draw real time</br>
-			Z R
-			<input type="range" id="cR" min="-2" max="2" step="0.01"></input>
-			I
-			<input type="range" id="cI" min="-2" max="2" step="0.01"></input><br>
-			<input type="number" id="cRnumber" min="-2" max="2" step="0.01"/>
-			<input type="number" id="cInumber" min="-2" max="2" step="0.01"/><br>
-			<input type="submit" style="font-size: 1em;" value="OK">
-		</form>
-	</div>>
+	<div class="container-menu">
+		<div class="menu mainMenu">
+			<span class="runner">
+				<input type="range" id="zoom" min="0.5" max="6.5" step="0.01">Zoom (0.5 - 6.5)</input>
+			</span>
+			<span class="runner">
+				<input type="range" id="zvacsenie" min="5" max="1000">Detail (5 - 1000)</input>
+			</span>
+			<span class="runner">
+				<input type="range" id="cR" min="-2" max="2" step="0.001">R</input>
+				<input type="number" id="cRnumber" min="-2" max="2" step="0.001"/>
+			</span>
+			<span class="runner">
+				<input type="range" id="cI" min="-2" max="2" step="0.001">I</input>
+				<input type="number" id="cInumber" min="-2" max="2" step="0.001"/>
+			</span>
+			Color (0-255)
+			<span>
+				R<input type="number" id="Rcolor" min="0" max="255" step="1"></input>
+				G<input type="number" id="Gcolor" min="0" max="255" step="1"></input>
+				B<input type="number" id="Bcolor" min="0" max="255" step="1"></input>
+			</span>
+			Multiplier (-20 - 20)
+			<span>
+				R<input type="number" id="Rmultiplier" min="-20" max="20" step="1"></input>
+				G<input type="number" id="Gmultiplier" min="-20" max="20" step="1"></input>
+				B<input type="number" id="Bmultiplier" min="-20" max="20" step="1"></input>
+			</span>
+			<span>
+				<input type="checkbox" id="axisCheck" >Axis
+				<input type="checkbox" id="pointsCheck" >Points
+				<input type="checkbox" id="drawRealTime" >Draw real time</br>
+			</span>
+			<button class="menu-button" onclick="okForMenu()" style="font-size: 1em;">OK</button>
+		</div>
+	</div>
 
-	<button id="menuButton" onclick="toggleLabel()">Menu</button>
+	<div class="container-menu">
+		<div class="menu presetsMenu">
+			<span>Choose preset:</span>
+		</div>
+	</div>
 
-	<script  src="/src/engine/controls.js"></script>     <!mozno prerobim do typescriptu import export, len neviem>m
+ 	<button id="menuButtonToggle" onclick="toggleMenu()">(M)enu</button>
+	<button id="presetsButtonToggle" onclick="toggleMenuPresets()">(P)resets</button>
+
+	<script  src="/src/engine/controls.js"></script>     <!mozno prerobim do typescriptu import export, len neviem>
 	<script  src="/src/engine/events.js"></script>				<!aku to ma vyhodu. ale mozno ma react donuti, ak to s tym>
 	<script  src="/src/engine/mouse.js"></script>			<!budem chciet integrovat, co aspon vyskusam>
 	<script  src="/src/engine/enginemain.js"></script>
@@ -94,6 +162,8 @@
 	<script  src="/src/game/axis.js"></script>
 	<script  src="/src/game/draw.js"></script>
 	<script  src="/src/game/ui.js"></script>
+	<script  src="/src/game/preset.js"></script>
+	<script  src="/src/game/values.js"></script>
 
 </body>
 

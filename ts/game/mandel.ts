@@ -33,26 +33,26 @@ function opakovaneVykreslenie ( { real:real, imaginary:imaginary}, vykreslit:boo
 
     do{
 
-        if(vykreslit) nakresliKruh(os.x + real * mierkaZvacsenia,os.y + imaginary * mierkaZvacsenia);
+        if(vykreslit) nakresliKruh(os.x + real * activePreset.mierkaZvacsenia,os.y + imaginary * activePreset.mierkaZvacsenia);
 
-        ({real, imaginary} = mandel( {real, imaginary} , cCislo));
+        ({real, imaginary} = mandel( {real, imaginary} , activePreset.cCislo));
 
         if(vykreslit){
-            canvasCtx.lineTo(os.x + real * mierkaZvacsenia,os.y + imaginary * mierkaZvacsenia);
+            canvasCtx.lineTo(os.x + real * activePreset.mierkaZvacsenia,os.y + imaginary * activePreset.mierkaZvacsenia);
             canvasCtx.stroke();
         }
 
         kolkokratsomzopakoval++;
 
-    } while ( (imaginary < cCislo.imaginary-boundariesStable || imaginary > cCislo.imaginary+boundariesStable)
-            && (real < cCislo.real-boundariesStable || real > cCislo.real+boundariesStable) && kolkokratsomzopakoval<repeatStable)
+    } while ( (imaginary < activePreset.cCislo.imaginary-boundariesStable || imaginary > activePreset.cCislo.imaginary+boundariesStable)
+            && (real < activePreset.cCislo.real-boundariesStable || real > activePreset.cCislo.real+boundariesStable) && kolkokratsomzopakoval<repeatStable)
 
     
     if(vykreslit){
-        nakresliKruh(os.x + real * mierkaZvacsenia,os.y + imaginary * mierkaZvacsenia);
-        canvasCtx.lineTo(os.x + cCislo.real * mierkaZvacsenia,os.y + cCislo.imaginary * mierkaZvacsenia);
+        nakresliKruh(os.x + real * activePreset.mierkaZvacsenia,os.y + imaginary * activePreset.mierkaZvacsenia);
+        canvasCtx.lineTo(os.x + activePreset.cCislo.real * activePreset.mierkaZvacsenia,os.y + activePreset.cCislo.imaginary * activePreset.mierkaZvacsenia);
         canvasCtx.stroke();
-        nakresliKruh(os.x + cCislo.real * mierkaZvacsenia,os.y + cCislo.imaginary * mierkaZvacsenia);
+        nakresliKruh(os.x + activePreset.cCislo.real * activePreset.mierkaZvacsenia,os.y + activePreset.cCislo.imaginary * activePreset.mierkaZvacsenia);
     }
 
     return kolkokratsomzopakoval;
