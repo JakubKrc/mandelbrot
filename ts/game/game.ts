@@ -16,8 +16,8 @@ window.onload = function () {
     needFullscreenToRun = false;
     needMouseLockToRun = false;
             
-    setInterval(mainCalculate ,1000/fps);       //toto bude treba prerobit, nejde to rovanko rychlo na vsetkych kompoch, je to na youtube
-    setInterval(mainDraw ,1000/fps);   
+    setInterval(mainCalculate ,1000/fps);  
+    mainDraw();
     
     elementsButtons = document.querySelectorAll('#menuButtonToggle, #presetsButtonToggle');
 
@@ -42,23 +42,20 @@ function mainCalculate():void {
     if (!mainInterval) return;                          //rozdelene vykreslovanie a pocitanie pohybu a vsetkeho. teraz sa nic nepohne,
                                                         //ale stale mozes obnovit obraz. vyhoda pri tvorbe menu, ako som zistil minule
     
-    if(keyPressed(keys['fire'])) {
+    if(keyPressed(keys['use'])) {
         hlavneCislo.real = (mousePos.x - os.x)/activePreset.mierkaZvacsenia;
         hlavneCislo.imaginary = (mousePos.y - os.y)/activePreset.mierkaZvacsenia;
         vykresliEste = 0;
     }
 
-    if(keyPressed(keys['use'])){
+    if(keyPressed(keys['fire'])){
         activePreset.cCislo.real = (mousePos.x - os.x)/activePreset.mierkaZvacsenia;
         activePreset.cCislo.imaginary = (mousePos.y - os.y)/activePreset.mierkaZvacsenia;
         vykresliEste = 0;
         calculateMainImage();
     }
 
-    if(keyPressedWaitForKeyUp(keys['x'])) {
-        axis=!axis;
-        vykresliEste=0;
-    }
+    if(keyPressedWaitForKeyUp(keys['x'])) axis=!axis;
 
     if(keyPressedWaitForKeyUp(keys['v'])) {
         presetOut();
@@ -66,8 +63,6 @@ function mainCalculate():void {
 
     if(keyPressedWaitForKeyUp(keys['m'])) toggleMenu();
     if(keyPressedWaitForKeyUp(keys['p'])) toggleMenuPresets();
-
-    if(keyPressedWaitForKeyUp(keys['i'])) presetIn();
 
     window.addEventListener('mousemove', (event) => {
         for (let i=0; i<elementsButtons.length; i++) {
@@ -82,21 +77,18 @@ function mainCalculate():void {
 
 function mainDraw(){
 
-    if(!keyPressed(keys['fire']) && !keyPressed(keys['use']) && vykresliEste>1){ 
-        return;
-    }
-
-    vykresliEste++;
-
-    canvasCtx.fillStyle='black';
-    canvasCtx.fillRect(0,0,canvas.width,canvas.height);
-
     canvasCtx.putImageData(mainImage, 0, 0);
 
     if(axis) drawAxis();
 
+    if(drawPoints)  {
+        canvasCtx.strokeStyle = 'green';
+        canvasCtx.font = canvas.height/10+'px Arial';
+        canvasCtx.fillText((opakovaneVykreslenie(hlavneCislo, drawPoints)+1).toString(), canvas.width/23, canvas.height/10); 
+    }
+
     fullscreenLockmouseMsg();  
 
-    //requestAnimationFrame(mainDraw);   //daky novy sposob vykreslovania na canvas. nemusis riesit fps ani sync s monitorom. rad som vyuzil
+    requestAnimationFrame(mainDraw);   //daky novy sposob vykreslovania na canvas. nemusis riesit fps ani sync s monitorom. rad som vyuzil
 
 }

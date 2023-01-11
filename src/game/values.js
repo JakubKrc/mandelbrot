@@ -1,5 +1,5 @@
 let presetArray = [];
-let fps = 15;
+let fps = 30;
 let mainInterval = true;
 let hlavneCislo = {
     imaginary: 0,
@@ -11,9 +11,8 @@ let os = {
 };
 let axis = false;
 let mainImage;
-let repeatStable = 150;
+let repeatStable = 100;
 let boundariesStable = 0;
-;
 let vykresliEste;
 let elementsButtons;
 let drawPoints = false;

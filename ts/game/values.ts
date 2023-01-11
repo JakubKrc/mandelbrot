@@ -22,7 +22,7 @@ let presetArray = [];
 
 type complexImaginary = {real:number,imaginary:number}; 
 
-let fps = 15;
+let fps = 30;
 let mainInterval = true;
 
 let hlavneCislo:complexImaginary = {
@@ -37,8 +37,8 @@ let os = {
 let axis = false;
 
 let mainImage : any;
-let repeatStable = 150;
-let boundariesStable = 0;;
+let repeatStable = 100;
+let boundariesStable = 0;
 let vykresliEste:number;
 let elementsButtons;
 

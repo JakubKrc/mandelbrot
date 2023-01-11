@@ -8,7 +8,5 @@ function drawAxis() {
     canvasCtx.moveTo(os.x, os.y);
     canvasCtx.arc(os.x, os.y, activePreset.mierkaZvacsenia, 0, 2 * Math.PI, false);
     canvasCtx.stroke();
-    canvasCtx.font = canvas.height / 10 + 'px Arial';
-    canvasCtx.fillText((opakovaneVykreslenie(hlavneCislo, drawPoints) + 1).toString(), canvas.width / 23, canvas.height / 10);
 }
 //# sourceMappingURL=axis.js.map
