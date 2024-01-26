@@ -22,7 +22,7 @@ let presetArray = [];
 
 type complexImaginary = {real:number,imaginary:number}; 
 
-let fps = 30;
+let fps = 20;
 let mainInterval = true;
 
 let hlavneCislo:complexImaginary = {
@@ -42,18 +42,20 @@ let boundariesStable = 0;
 let vykresliEste:number;
 let elementsButtons;
 
-let drawPoints=false;
+let drawPoints=true;
 let drawRealTime = true;
 
 let spaceBetweePixels:number;
 let howMuchFromSetX:number;
 let howMuchFromSetY:number;
 
+let itinerations:number = 0;
+
 //co treba nacitat do presetu
 
 let activePreset:presetValues = {
 
-    mierkaZvacsenia : 150,
+    mierkaZvacsenia : 100,
     mieraZoomu : 2,
 
     cCislo : { 

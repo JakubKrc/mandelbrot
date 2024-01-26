@@ -1,5 +1,5 @@
 let presetArray = [];
-let fps = 30;
+let fps = 20;
 let mainInterval = true;
 let hlavneCislo = {
     imaginary: 0,
@@ -15,14 +15,15 @@ let repeatStable = 100;
 let boundariesStable = 0;
 let vykresliEste;
 let elementsButtons;
-let drawPoints = false;
+let drawPoints = true;
 let drawRealTime = true;
 let spaceBetweePixels;
 let howMuchFromSetX;
 let howMuchFromSetY;
+let itinerations = 0;
 //co treba nacitat do presetu
 let activePreset = {
-    mierkaZvacsenia: 150,
+    mierkaZvacsenia: 100,
     mieraZoomu: 2,
     cCislo: {
         real: 0,

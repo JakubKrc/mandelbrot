@@ -51,6 +51,16 @@
 		left: 100%;
 		transform: translate(100%, -50%);
 	}
+	.container-menu .valuesMenu{
+		top:7%;
+		left:50%;
+		transform: translate(-50%, -50%);
+		pointer-events: none;
+		display: none;
+	}
+	.container-menu .openValuesMenu{
+		display:block;
+	}
 	.container-menu .open {
 		left: 50%;
   		transform: translate(-50%, -50%);
@@ -147,6 +157,15 @@
 	<div class="container-menu">
 		<div class="menu presetsMenu">
 			<span>Choose preset:</span>
+		</div>
+	</div>
+
+	<div class="container-menu">
+		<div class="menu valuesMenu">
+			<span>Values:</span>
+			<span>Iterations before out of reach (max <span id="max-itinerations"></span> ): <span id="itinerations"></span></span>
+			<span>cCislo.real <span id="cCisloreal"></span></span>
+			<span>cCislo.imaginary <span id="cCisloimaginary"></span></span>
 		</div>
 	</div>
 

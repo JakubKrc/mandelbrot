@@ -42,13 +42,15 @@ function mainCalculate() {
     }
     if (keyPressedWaitForKeyUp(keys['x']))
         axis = !axis;
-    if (keyPressedWaitForKeyUp(keys['v'])) {
+    if (keyPressedWaitForKeyUp(keys['o'])) {
         presetOut();
     }
     if (keyPressedWaitForKeyUp(keys['m']))
         toggleMenu();
     if (keyPressedWaitForKeyUp(keys['p']))
         toggleMenuPresets();
+    if (keyPressedWaitForKeyUp(keys['v']))
+        toggleMenuValues();
     window.addEventListener('mousemove', (event) => {
         for (let i = 0; i < elementsButtons.length; i++) {
             elementsButtons[i].style.opacity =
@@ -61,11 +63,9 @@ function mainDraw() {
     canvasCtx.putImageData(mainImage, 0, 0);
     if (axis)
         drawAxis();
-    if (drawPoints) {
-        canvasCtx.strokeStyle = 'green';
-        canvasCtx.font = canvas.height / 10 + 'px Arial';
-        canvasCtx.fillText((opakovaneVykreslenie(hlavneCislo, drawPoints) + 1).toString(), canvas.width / 23, canvas.height / 10);
-    }
+    if (drawPoints)
+        itinerations = opakovaneVykreslenie(hlavneCislo, drawPoints) + 1;
+    updateValuesMenu();
     fullscreenLockmouseMsg();
     requestAnimationFrame(mainDraw); //daky novy sposob vykreslovania na canvas. nemusis riesit fps ani sync s monitorom. rad som vyuzil
 }

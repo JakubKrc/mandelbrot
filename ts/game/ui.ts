@@ -146,3 +146,15 @@ function toggleMenuPresets() {
         document.querySelector('.container-menu .mainMenu').classList.toggle('open');
 
 }
+
+function toggleMenuValues() {
+
+    document.querySelector('.container-menu .valuesMenu').classList.toggle('openValuesMenu');
+}
+
+function updateValuesMenu() {
+    document.querySelector("#itinerations").innerText = itinerations;
+    document.querySelector("#max-itinerations").innerText = repeatStable + 1;
+    document.querySelector("#cCisloreal").innerText = activePreset.cCislo.real;
+    document.querySelector("#cCisloimaginary").innerText = activePreset.cCislo.imaginary;
+}
