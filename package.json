@@ -1,5 +1,5 @@
 {
-  "name": "kubogame",
+  "name": "mandelbrot",
   "version": "1.0.0",
   "description": "Trying to login to mysql database...",
   "main": "src/nodedata.js",
@@ -9,14 +9,11 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://gitlab.com/krc.jakub/kubogame.git"
+    "url": ""
   },
   "author": "",
   "license": "ISC",
-  "bugs": {
-    "url": "https://gitlab.com/krc.jakub/kubogame/issues"
-  },
-  "homepage": "https://gitlab.com/krc.jakub/kubogame#README",
+  "homepage": "",
   "devDependencies": {
     "typescript": "^5.9.3"
   }
