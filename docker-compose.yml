@@ -1,7 +1,7 @@
 services:
-  mandel:
+  mandelbrot:
     image: nginx:alpine
-    container_name: mandel
+    container_name: mandelbrot
     expose:
       - "80"
     volumes:

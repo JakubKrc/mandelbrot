@@ -1,4 +1,4 @@
-name: Deploy mandel to Hetzner
+name: Deploy mandelbrot to Hetzner
 
 on:
   workflow_dispatch:
@@ -19,7 +19,7 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
           port: ${{ secrets.SSH_PORT }}
           script: |
-            cd ~/mandel
+            cd ~/mandelbrot
             git pull origin main
 
             cd html
