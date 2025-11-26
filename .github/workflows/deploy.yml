@@ -22,7 +22,9 @@ jobs:
             cd ~/mandel
             git pull origin main
 
+            cd html
             npm install
             npx tsc
 
+            cd ..
             docker compose up --build -d
