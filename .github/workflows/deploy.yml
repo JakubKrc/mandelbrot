@@ -19,12 +19,15 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
           port: ${{ secrets.SSH_PORT }}
           script: |
+            export NVM_DIR="$HOME/.nvm"
+            source "$NVM_DIR/nvm.sh"
+
             cd ~/mandelbrot
             git pull origin main
 
-            cd html
+            cd ~/mandelbrot/html
             npm install
             npx tsc
 
-            cd ..
+            cd ~/mandelbrot
             docker compose up --build -d
