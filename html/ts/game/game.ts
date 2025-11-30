@@ -42,23 +42,26 @@ function mainCalculate():void {
     if (!mainInterval) return;                          //rozdelene vykreslovanie a pocitanie pohybu a vsetkeho. teraz sa nic nepohne,
                                                         //ale stale mozes obnovit obraz. vyhoda pri tvorbe menu, ako som zistil minule
     
-    if(keyPressed(keys['use'])) {
-        hlavneCislo.real = (mousePos.x - os.x)/activePreset.mierkaZvacsenia;
-        hlavneCislo.imaginary = (mousePos.y - os.y)/activePreset.mierkaZvacsenia;
-        vykresliEste = 0;
-    }
+    if(!isMenuOpen()){
+        if(keyPressed(keys['use'])) {
+            hlavneCislo.real = (mousePos.x - os.x)/activePreset.mierkaZvacsenia;
+            hlavneCislo.imaginary = (mousePos.y - os.y)/activePreset.mierkaZvacsenia;
+            vykresliEste = 0;
+        }
 
-    if(keyPressed(keys['fire'])){
-        activePreset.cCislo.real = (mousePos.x - os.x)/activePreset.mierkaZvacsenia;
-        activePreset.cCislo.imaginary = (mousePos.y - os.y)/activePreset.mierkaZvacsenia;
-        vykresliEste = 0;
-        calculateMainImage();
-    }
+        if(keyPressed(keys['fire'])){
+            activePreset.cCislo.real = (mousePos.x - os.x)/activePreset.mierkaZvacsenia;
+            activePreset.cCislo.imaginary = (mousePos.y - os.y)/activePreset.mierkaZvacsenia;
+            vykresliEste = 0;
+            calculateMainImage();
+        }
 
-    if(keyPressedWaitForKeyUp(keys['x'])) axis=!axis;
+        if(keyPressedWaitForKeyUp(keys['x'])) axis=!axis;
+        if(keyPressedWaitForKeyUp(keys['t'])) drawPoints=!drawPoints;
 
-    if(keyPressedWaitForKeyUp(keys['o'])) {
-        presetOut();
+        if(keyPressedWaitForKeyUp(keys['o'])) {
+            presetOut();
+        }
     }
 
     if(keyPressedWaitForKeyUp(keys['m'])) toggleMenu();
@@ -91,4 +94,11 @@ function mainDraw(){
 
     requestAnimationFrame(mainDraw);   //daky novy sposob vykreslovania na canvas. nemusis riesit fps ani sync s monitorom. rad som vyuzil
 
+}
+
+function isMenuOpen() {
+    if(document.querySelector('.container-menu .presetsMenu').classList.contains('open')||
+        document.querySelector('.container-menu .mainMenu').classList.contains('open'))
+        return true;
+    return false;
 }

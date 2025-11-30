@@ -17,6 +17,7 @@ function inicializeKeyboard():void {
     keys['v']=['v',"V"];
     keys['p']=['p',"P"];
     keys['i']=['i',"I"];
+    keys['t']=['t',"T"];
     keys['jump']=[' '];
     keys['menu']=['Delete'];
     keys['fire']=['leftMouseButton'];

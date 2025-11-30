@@ -42,7 +42,7 @@ let boundariesStable = 0;
 let vykresliEste:number;
 let elementsButtons;
 
-let drawPoints=true;
+let drawPoints=false;
 let drawRealTime = true;
 
 let spaceBetweePixels:number;
